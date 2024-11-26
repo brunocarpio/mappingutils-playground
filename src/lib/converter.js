@@ -36,17 +36,19 @@ export default function mappingFromString(mappingState) {
             .replaceAll("\n", "")
             .replace(new RegExp("(]),+$", "g"), "$1");
     });
-    console.log("lines", lines);
+    //console.log("lines", lines);
     let arr = [];
     for (let line of lines) {
         if (line) {
             let [k, v] = line.split(":");
             if (k && v) {
-                console.log("k", k);
-                console.log("v", v);
+                //console.log("k", k);
+                //console.log("v", v);
                 k = k.trim().slice(1, -1);
                 v = v.trim();
                 if (v.match(new RegExp("^\\["))) {
+                    //console.log("in condition");
+                    //console.log("v", v);
                     v = v.replace(",]", "]");
                     v = v.slice(1, -1).trim();
                     v = v.split('",');

@@ -1,9 +1,11 @@
 <script lang="ts">
-    import Editor from "./Editor.svelte";
     import { Pane, Splitpanes } from "svelte-splitpanes";
     import sample from "$lib/sample";
     import { mapObj } from "mappingutils";
     import mappingFromString from "$lib/converter";
+    import CodeMirror from "svelte-codemirror-editor";
+    import { json } from "@codemirror/lang-json";
+    import { javascript } from "@codemirror/lang-javascript";
 
     let inputState: string = $state(sample.json);
     let mappingState: string = $state(sample.mapping);
@@ -30,15 +32,55 @@
 <div class="h-dvh">
     <Splitpanes>
         <Pane>
-            <Editor bind:value={inputState} type={"source"} />
+            <CodeMirror
+                bind:value={inputState}
+                class="font-mono text-base"
+                lang={json()}
+                lineWrapping={true}
+                styles={{
+                    "&": {
+                        height: "100dvh",
+                    },
+                    ".cm-content": {
+                        overflow: "auto",
+                    },
+                }}
+            />
         </Pane>
         <Pane>
             <Splitpanes horizontal={true}>
-                <Pane>
-                    <Editor bind:value={mappingState} type={"mapping"} />
+                <Pane size={25}>
+                    <CodeMirror
+                        bind:value={mappingState}
+                        class="font-mono text-base"
+                        lang={javascript()}
+                        lineWrapping={true}
+                        styles={{
+                            "&": {
+                                height: "25dvh",
+                            },
+                            ".cm-content": {
+                                overflow: "auto",
+                            },
+                        }}
+                    />
                 </Pane>
                 <Pane>
-                    <Editor value={resultState} type={"target"} />
+                    <CodeMirror
+                        class="font-mono text-base"
+                        editable={false}
+                        lang={json()}
+                        lineWrapping={true}
+                        value={resultState}
+                        styles={{
+                            "&": {
+                                height: "75dvh",
+                            },
+                            ".cm-content": {
+                                overflow: "auto",
+                            },
+                        }}
+                    />
                 </Pane>
             </Splitpanes>
         </Pane>

@@ -53,8 +53,8 @@ let json = `{
 }`;
 
 let mapping = `{
-    "$.person.name": ["$.FirstName", "$.Surname", (a, b) => \`\${a} \${b}\`],
-    "$.person.home_phone": "$.Phone[1]",
+    "$.person.name": ["$.FirstName", "$.Surname", (a, b) => a + ' ' + b],
+    "$.person.home_phone": "$.Phone[?(@.type=='home')].number"
 }`;
 
 export default {

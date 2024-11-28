@@ -20,18 +20,17 @@
                 null,
                 2
             );
-        } catch (err) {
-            console.log(err);
+        } catch (err: any) {
+            return err.toString();
         }
         return cvalue;
     }
 </script>
 
-<h1>Hello world</h1>
-
-<div class="h-dvh">
+<div class="h-[calc(100dvh-40px)]">
     <Splitpanes>
         <Pane>
+            <span class="font-mono font-semibold px-5">SOURCE</span>
             <CodeMirror
                 bind:value={inputState}
                 class="font-mono text-base"
@@ -39,7 +38,7 @@
                 lineWrapping={true}
                 styles={{
                     "&": {
-                        height: "100dvh",
+                        height: "93dvh",
                     },
                     ".cm-content": {
                         overflow: "auto",
@@ -50,6 +49,7 @@
         <Pane>
             <Splitpanes horizontal={true}>
                 <Pane size={25}>
+                    <span class="font-mono font-semibold px-5">MAPPING</span>
                     <CodeMirror
                         bind:value={mappingState}
                         class="font-mono text-base"
@@ -57,7 +57,7 @@
                         lineWrapping={true}
                         styles={{
                             "&": {
-                                height: "25dvh",
+                                height: "21dvh",
                             },
                             ".cm-content": {
                                 overflow: "auto",
@@ -66,6 +66,7 @@
                     />
                 </Pane>
                 <Pane>
+                    <span class="font-mono font-semibold px-5">TARGET</span>
                     <CodeMirror
                         class="font-mono text-base"
                         editable={false}
@@ -74,7 +75,7 @@
                         value={resultState}
                         styles={{
                             "&": {
-                                height: "75dvh",
+                                height: "73dvh",
                             },
                             ".cm-content": {
                                 overflow: "auto",

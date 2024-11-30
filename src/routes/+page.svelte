@@ -1,29 +1,29 @@
 <script lang="ts">
     import { Pane, Splitpanes } from "svelte-splitpanes";
     import sample from "$lib/sample";
-    import { mapObj } from "mappingutils";
-    import mappingFromString from "$lib/converter";
     import CodeMirror from "svelte-codemirror-editor";
     import { json } from "@codemirror/lang-json";
     import { javascript } from "@codemirror/lang-javascript";
+    import ScriptEvaluator from "$lib/ScriptEvaluator";
 
     let inputState: string = $state(sample.json);
     let mappingState: string = $state(sample.mapping);
     let resultState = $derived(computeMapping());
 
-    function computeMapping() {
-        let cvalue = "";
-        let mapping = mappingFromString(mappingState);
+    let evaluator = new ScriptEvaluator();
+
+    async function computeMapping() {
+        let out = "";
         try {
-            cvalue = JSON.stringify(
-                mapObj(JSON.parse(inputState), mapping),
-                null,
-                2
-            );
+            let target = await evaluator.evalAsync({
+                source: inputState,
+                mapping: mappingState,
+            });
+            out = JSON.stringify(target, null, 2);
         } catch (err: any) {
             return err.toString();
         }
-        return cvalue;
+        return out;
     }
 </script>
 
@@ -67,21 +67,25 @@
                 </Pane>
                 <Pane>
                     <span class="font-mono font-semibold px-5">TARGET</span>
-                    <CodeMirror
-                        class="font-mono text-base"
-                        editable={false}
-                        lang={json()}
-                        lineWrapping={true}
-                        value={resultState}
-                        styles={{
-                            "&": {
-                                height: "73dvh",
-                            },
-                            ".cm-content": {
-                                overflow: "auto",
-                            },
-                        }}
-                    />
+                    {#await resultState then result}
+                        <CodeMirror
+                            class="font-mono text-base"
+                            editable={false}
+                            lang={json()}
+                            lineWrapping={true}
+                            value={result}
+                            styles={{
+                                "&": {
+                                    height: "73dvh",
+                                },
+                                ".cm-content": {
+                                    overflow: "auto",
+                                },
+                            }}
+                        />
+                    {:catch error}
+                        <p class="text-red-700 text-lg">{error.message}</p>
+                    {/await}
                 </Pane>
             </Splitpanes>
         </Pane>

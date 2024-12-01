@@ -48,7 +48,7 @@
         </Pane>
         <Pane>
             <Splitpanes horizontal={true}>
-                <Pane size={25}>
+                <Pane size={35}>
                     <span class="font-mono font-semibold px-5">MAPPING</span>
                     <CodeMirror
                         bind:value={mappingState}
@@ -57,7 +57,7 @@
                         lineWrapping={true}
                         styles={{
                             "&": {
-                                height: "21dvh",
+                                height: "28dvh",
                             },
                             ".cm-content": {
                                 overflow: "auto",
@@ -65,7 +65,7 @@
                         }}
                     />
                 </Pane>
-                <Pane>
+                <Pane size={65}>
                     <span class="font-mono font-semibold px-5">TARGET</span>
                     {#await resultState then result}
                         <CodeMirror
@@ -76,7 +76,7 @@
                             value={result}
                             styles={{
                                 "&": {
-                                    height: "73dvh",
+                                    height: "58dvh",
                                 },
                                 ".cm-content": {
                                     overflow: "auto",

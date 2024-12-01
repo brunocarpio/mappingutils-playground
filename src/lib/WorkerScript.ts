@@ -29,6 +29,7 @@ const allowedGlobals = new Set([
     "WeakSet",
     "clearTimeout",
     "console",
+    "eval",
     "isFinite",
     "isNaN",
     "parseFloat",

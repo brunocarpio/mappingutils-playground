@@ -7,10 +7,7 @@ const config = {
             strict: false,
         }),
         paths: {
-            base:
-                process.env.NODE_ENV === "production"
-                    ? "/mappingutils-playground"
-                    : "",
+            base: process.argv.includes("dev") ? "" : process.env.BASE_PATH,
         },
     },
     preprocess: vitePreprocess(),

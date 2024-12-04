@@ -24,6 +24,7 @@
     "dependencies": {
         "@codemirror/lang-javascript": "^6.2.2",
         "@codemirror/lang-json": "^6.0.1",
+        "@codemirror/view": "^6.35.0",
         "mappingutils": "^2.1.0",
         "svelte-codemirror-editor": "^1.4.1",
         "svelte-splitpanes": "^8.0.9"

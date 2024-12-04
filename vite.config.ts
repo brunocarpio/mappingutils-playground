@@ -9,6 +9,7 @@ export default defineConfig({
             "codemirror",
             "@codemirror/language-javascript",
             "@codemirror/language-json",
+            "@codemirror/view",
         ],
     },
 });

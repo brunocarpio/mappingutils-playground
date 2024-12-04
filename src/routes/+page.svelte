@@ -4,6 +4,7 @@
     import CodeMirror from "svelte-codemirror-editor";
     import { json } from "@codemirror/lang-json";
     import { javascript } from "@codemirror/lang-javascript";
+    import { scrollPastEnd } from "@codemirror/view";
     import ScriptEvaluator from "$lib/ScriptEvaluator";
 
     let inputState: string = $state(sample.json);
@@ -33,15 +34,13 @@
             <span class="font-mono font-semibold px-5">SOURCE</span>
             <CodeMirror
                 bind:value={inputState}
-                class="font-mono text-base"
+                class="font-mono text-base h-full"
                 lang={json()}
                 lineWrapping={true}
+                extensions={[scrollPastEnd()]}
                 styles={{
                     "&": {
-                        height: "93dvh",
-                    },
-                    ".cm-content": {
-                        overflow: "auto",
+                        height: "100%",
                     },
                 }}
             />
@@ -52,15 +51,13 @@
                     <span class="font-mono font-semibold px-5">MAPPING</span>
                     <CodeMirror
                         bind:value={mappingState}
-                        class="font-mono text-base"
+                        class="font-mono text-base h-full"
                         lang={javascript()}
                         lineWrapping={true}
+                        extensions={[scrollPastEnd()]}
                         styles={{
                             "&": {
-                                height: "28dvh",
-                            },
-                            ".cm-content": {
-                                overflow: "auto",
+                                height: "100%",
                             },
                         }}
                     />
@@ -69,17 +66,15 @@
                     <span class="font-mono font-semibold px-5">TARGET</span>
                     {#await resultState then result}
                         <CodeMirror
-                            class="font-mono text-base"
+                            class="font-mono text-base h-full"
                             editable={false}
                             lang={json()}
                             lineWrapping={true}
+                            extensions={[scrollPastEnd()]}
                             value={result}
                             styles={{
                                 "&": {
-                                    height: "58dvh",
-                                },
-                                ".cm-content": {
-                                    overflow: "auto",
+                                    height: "100%",
                                 },
                             }}
                         />

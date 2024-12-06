@@ -63,8 +63,8 @@ let json = `{
 let mapping = `{
   "$.header.invoice_number": ["$.invoice_id", (id) => id.split("-").at(-1)],
   "$.header.document_type": "INVOICE",
-  "$.header.posting_date": new Date(),
-  "$.header.due_date": ["$.due_date", (date) => new Date(date)],
+  "$.header.posting_date": ["$.date", (d) => new Date(d)],
+  "$.header.due_date": ["$.due_date", (d) => new Date(d)],
   "$.header.currency": "USD",
   "$.header.reference_number": null,
   "$.header.status": ["$.payment_status", (status) => status === 'Paid' ? 'Closed' : 'Open'],

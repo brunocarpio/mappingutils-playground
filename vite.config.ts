@@ -10,6 +10,7 @@ export default defineConfig({
             "@codemirror/language-javascript",
             "@codemirror/language-json",
             "@codemirror/view",
+            "@codemirror/theme-one-dark",
         ],
     },
 });

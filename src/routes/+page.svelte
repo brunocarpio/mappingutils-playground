@@ -28,13 +28,35 @@
         }
         return out;
     }
+
+    let isDarkModeEnabled = $derived(darkMode.isActive);
+
+    let lightBackground = "bg-[#f5f5f5]";
+    let darkBackground = "bg-[#1e2021]";
+    function getBackground() {
+        if (isDarkModeEnabled) {
+            return darkBackground;
+        } else {
+            return lightBackground;
+        }
+    }
+    function getPaneTypeClasses() {
+        let base = "font-mono font-semibold px-5";
+        if (isDarkModeEnabled) {
+            return base + " text-[#e8e6e3]";
+        } else {
+            return base + " text-black";
+        }
+    }
 </script>
 
 <div class="h-[calc(100dvh-40px)]">
-    <Splitpanes>
+    <Splitpanes theme="my-theme">
         <Pane>
-            <span class="font-mono font-semibold px-5">SOURCE</span>
-            {#if darkMode.isActive}
+            <div class={getBackground()}>
+                <span class={getPaneTypeClasses()}>SOURCE</span>
+            </div>
+            {#if isDarkModeEnabled}
                 <CodeMirror
                     bind:value={inputState}
                     class="font-mono text-base h-full"
@@ -44,7 +66,7 @@
                     theme={oneDark}
                     styles={{
                         "&": {
-                            height: "100%",
+                            "scrollbar-color": "#9ca3af rgb(54, 59, 61)",
                         },
                     }}
                 />
@@ -55,17 +77,14 @@
                     lang={json()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
-                    styles={{
-                        "&": {
-                            height: "100%",
-                        },
-                    }}
                 />
             {/if}
         </Pane>
         <Pane>
-            <span class="font-mono font-semibold px-5">MAPPING</span>
-            {#if darkMode.isActive}
+            <div class={getBackground()}>
+                <span class={getPaneTypeClasses()}>MAPPING</span>
+            </div>
+            {#if isDarkModeEnabled}
                 <CodeMirror
                     bind:value={mappingState}
                     class="font-mono text-base h-full"
@@ -75,7 +94,7 @@
                     theme={oneDark}
                     styles={{
                         "&": {
-                            height: "100%",
+                            "scrollbar-color": "#9ca3af rgb(54, 59, 61)",
                         },
                     }}
                 />
@@ -86,17 +105,14 @@
                     lang={javascript()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
-                    styles={{
-                        "&": {
-                            height: "100%",
-                        },
-                    }}
                 />
             {/if}
         </Pane>
         <Pane>
-            <span class="font-mono font-semibold px-5">TARGET</span>
-            {#if darkMode.isActive}
+            <div class={getBackground()}>
+                <span class={getPaneTypeClasses()}>TARGET</span>
+            </div>
+            {#if isDarkModeEnabled}
                 {#await resultState then result}
                     <CodeMirror
                         class="font-mono text-base h-full"
@@ -108,7 +124,7 @@
                         theme={oneDark}
                         styles={{
                             "&": {
-                                height: "100%",
+                                "scrollbar-color": "#9ca3af rgb(54, 59, 61)",
                             },
                         }}
                     />
@@ -124,11 +140,6 @@
                         lineWrapping={true}
                         extensions={[scrollPastEnd()]}
                         value={result}
-                        styles={{
-                            "&": {
-                                height: "100%",
-                            },
-                        }}
                     />
                 {:catch error}
                     <p class="text-red-700 text-lg">{error.message}</p>
@@ -137,3 +148,49 @@
         </Pane>
     </Splitpanes>
 </div>
+
+<style global lang="scss">
+    .splitpanes.my-theme {
+        .splitpanes__pane {
+            background-color: #edebeb;
+        }
+        .splitpanes__splitter {
+            background-color: #e8e6e3;
+            position: relative;
+            &:before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                transition: opacity 0.4s;
+                background-color: rgba(255, 0, 0, 0.3);
+                opacity: 0;
+                z-index: 1;
+            }
+            &:hover:before {
+                opacity: 1;
+            }
+            &.splitpanes__splitter__active {
+                z-index: 2; /* Fix an issue of overlap fighting with a near hovered splitter */
+            }
+        }
+    }
+    .my-theme {
+        &.splitpanes--vertical > .splitpanes__splitter:before {
+            left: -7px;
+            right: -7px;
+            height: 100%;
+            cursor: col-resize;
+        }
+        &.splitpanes--horizontal > .splitpanes__splitter:before {
+            top: -7px;
+            bottom: -7px;
+            width: 100%;
+            cursor: row-resize;
+        }
+    }
+
+    .cm-editor {
+        height: 100%;
+    }
+</style>

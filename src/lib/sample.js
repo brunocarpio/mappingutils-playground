@@ -35,51 +35,54 @@ let json = `{
       "item_id": "ITEM-001",
       "description": "Wireless Keyboard",
       "quantity": 1,
-      "unit_price": 49.99,
-      "total": 49.99
+      "unit_price": 49.99
     },
     {
       "item_id": "ITEM-002",
       "description": "Bluetooth Mouse",
       "quantity": 2,
-      "unit_price": 25.50,
-      "total": 51.00
+      "unit_price": 25.50
     }
   ],
-  "subtotal": 100.99,
   "tax": {
     "rate": 8.25,
     "amount": 8.33
   },
-  "total": 109.32,
-  "currency": "USD",
   "notes": "Thank you for your business!",
   "payment_status": "Unpaid",
   "payment_methods": ["Credit Card", "Bank Transfer"],
   "terms": "Payment due within 14 days from the invoice date."
 }
+
 `;
 
 let mapping = `{
-  "$.header.invoice_number": ["$.invoice_id", (id) => id.split("-").at(-1)],
+  "$.line_items[]": ["$.items[*]", (item) => {
+    return {
+      item_sku: item.item_id,
+      item_desc: item.description,
+      unit_of_measure: "EACH",
+      qty: item.quantity,
+      unit_price: item.unit_price,
+      total: (item.quantity * item.unit_price).toFixed(2)
+    }
+  }],
+
+  "$.header.invoice_number": ["$.invoice_id", (id) =>
+    id.split("-").at(-1)],
   "$.header.document_type": "INVOICE",
-  "$.header.posting_date": ["$.date", (d) => new Date(d)],
-  "$.header.due_date": ["$.due_date", (d) => new Date(d)],
+  "$.header.posting_date": "$.date",
+  "$.header.due_date": "$.due_date",
   "$.header.currency": "USD",
   "$.header.reference_number": null,
-  "$.header.status": ["$.payment_status", (status) => status === 'Paid' ? 'Closed' : 'Open'],
-  "$.line_items": ["$.items", (items) => {
-    return items.map((item, index) => ({
-      line_item_number: index + 1,
-      product_id: item.item_id,
-      description: item.description,
-      quantity: item.quantity,
-      unit_price: item.unit_price,
-      unit_of_measure: "EACH",
-      total: item.total
-    }))
-  }],
-  "$.totals.subtotals": "$.subtotal",
+  "$.header.status": ["$.payment_status", (status) =>
+    status === 'Paid' ? 'Closed' : 'Open'],
+
+  "$.totals.subtotals": ["$.items", (items) =>
+    items.map(item => item.quantity * item.unit_price)
+    .reduce((a,b) => a + b).toFixed(2)
+  ],
+
   "$.taxes[]": ["$.tax", (obj) => {
     return {"tax_code": "TX001", ...obj}
   }]

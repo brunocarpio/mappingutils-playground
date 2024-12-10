@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Pane, Splitpanes } from "svelte-splitpanes";
-    import sample from "$lib/sample";
+    import { invoiceSample } from "$lib/sample";
     import CodeMirror from "svelte-codemirror-editor";
     import { json } from "@codemirror/lang-json";
     import { javascript } from "@codemirror/lang-javascript";
@@ -9,8 +9,8 @@
     import { darkMode } from "$lib/shared.svelte.js";
     import { oneDark } from "@codemirror/theme-one-dark";
 
-    let inputState: string = $state(sample.json);
-    let mappingState: string = $state(sample.mapping);
+    let inputState: string = $state(invoiceSample.source);
+    let mappingState: string = $state(invoiceSample.mapping);
     let resultState = $derived(computeMapping());
 
     let evaluator = new ScriptEvaluator();
@@ -59,7 +59,7 @@
             {#if isDarkModeEnabled}
                 <CodeMirror
                     bind:value={inputState}
-                    class="font-mono text-base h-full"
+                    class="font-mono text-sm h-full"
                     lang={json()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -73,7 +73,7 @@
             {:else}
                 <CodeMirror
                     bind:value={inputState}
-                    class="font-mono text-base h-full"
+                    class="font-mono text-sm h-full"
                     lang={json()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -87,7 +87,7 @@
             {#if isDarkModeEnabled}
                 <CodeMirror
                     bind:value={mappingState}
-                    class="font-mono text-base h-full"
+                    class="font-mono text-sm h-full"
                     lang={javascript()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -101,7 +101,7 @@
             {:else}
                 <CodeMirror
                     bind:value={mappingState}
-                    class="font-mono text-base h-full"
+                    class="font-mono text-sm h-full"
                     lang={javascript()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -115,7 +115,7 @@
             {#if isDarkModeEnabled}
                 {#await resultState then result}
                     <CodeMirror
-                        class="font-mono text-base h-full"
+                        class="font-mono text-sm h-full"
                         editable={false}
                         lang={json()}
                         lineWrapping={true}
@@ -134,7 +134,7 @@
             {:else}
                 {#await resultState then result}
                     <CodeMirror
-                        class="font-mono text-base h-full"
+                        class="font-mono text-sm h-full"
                         editable={false}
                         lang={json()}
                         lineWrapping={true}

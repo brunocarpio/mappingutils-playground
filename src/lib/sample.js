@@ -1,4 +1,5 @@
-let json = `{
+export let invoiceSample = {
+  source: `{
   "invoice_id": "INV-001",
   "date": "2024-12-01",
   "due_date": "2024-12-15",
@@ -52,11 +53,8 @@ let json = `{
   "payment_status": "Unpaid",
   "payment_methods": ["Credit Card", "Bank Transfer"],
   "terms": "Payment due within 14 days from the invoice date."
-}
-
-`;
-
-let mapping = `{
+}`,
+  mapping: `{
   "$.line_items[]": ["$.items[*]", (item) => {
     return {
       item_sku: item.item_id,
@@ -86,9 +84,5 @@ let mapping = `{
   "$.taxes[]": ["$.tax", (obj) => {
     return {"tax_code": "TX001", ...obj}
   }]
-}`;
-
-export default {
-    json,
-    mapping,
-};
+}`
+}

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Pane, Splitpanes } from "svelte-splitpanes";
-    import { invoiceSample } from "$lib/sample";
+    import { invoiceSample, itemSample } from "$lib/samples";
     import CodeMirror from "svelte-codemirror-editor";
     import { json } from "@codemirror/lang-json";
     import { javascript } from "@codemirror/lang-javascript";
@@ -9,30 +9,52 @@
     import { darkMode } from "$lib/shared.svelte.js";
     import { oneDark } from "@codemirror/theme-one-dark";
 
-    let inputState: string = $state(invoiceSample.source);
-    let mappingState: string = $state(invoiceSample.mapping);
-    let resultState = $derived(computeMapping());
-
-    let evaluator = new ScriptEvaluator();
-
     async function computeMapping() {
-        let out = "";
         try {
             let target = await evaluator.evalAsync({
-                source: inputState,
+                source: sourceState,
                 mapping: mappingState,
             });
-            out = JSON.stringify(target, null, 2);
+            return JSON.stringify(target, null, 2);
         } catch (err: any) {
             return err.toString();
         }
-        return out;
     }
+
+    let sampleOptions = [
+        {
+            value: "Item",
+            source: itemSample.source,
+            mapping: itemSample.mapping,
+        },
+        {
+            value: "Invoice",
+            source: invoiceSample.source,
+            mapping: invoiceSample.mapping,
+        },
+    ];
+
+    let selectedState = $state(sampleOptions[0].value);
+    let sourceState = $state(sampleOptions[0].source);
+    let mappingState = $state(sampleOptions[0].mapping);
+    let targetState = $derived(computeMapping());
+
+    function handleSelectionChange(event: Event) {
+        let selected = sampleOptions.find(
+            (option) =>
+                option.value === (event.target as HTMLSelectElement).value,
+        );
+        sourceState = selected ? selected.source : "";
+        mappingState = selected ? selected.mapping : "";
+    }
+
+    let evaluator = new ScriptEvaluator();
 
     let isDarkModeEnabled = $derived(darkMode.isActive);
 
     let lightBackground = "bg-[#f5f5f5]";
     let darkBackground = "bg-[#1e2021]";
+    let textGray = "text-[#e8e6e3]";
     function getBackground() {
         if (isDarkModeEnabled) {
             return darkBackground;
@@ -40,12 +62,19 @@
             return lightBackground;
         }
     }
-    function getPaneTypeClasses() {
+    function getTypeStyle() {
         let base = "font-mono font-semibold px-5";
         if (isDarkModeEnabled) {
-            return base + " text-[#e8e6e3]";
+            return base + " " + textGray;
         } else {
             return base + " text-black";
+        }
+    }
+    function getSelectStyle() {
+        if (isDarkModeEnabled) {
+            return "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500";
+        } else {
+            return "bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500";
         }
     }
 </script>
@@ -53,13 +82,25 @@
 <div class="h-[calc(100dvh-40px)]">
     <Splitpanes theme="my-theme">
         <Pane>
-            <div class={getBackground()}>
-                <span class={getPaneTypeClasses()}>SOURCE</span>
+            <div
+                class="flex justify-between items-center pr-6 h-7 {getBackground()}"
+            >
+                <span class={getTypeStyle()}>SOURCE</span>
+                <select
+                    name="sample"
+                    bind:value={selectedState}
+                    onchange={handleSelectionChange}
+                    class={getSelectStyle()}
+                >
+                    {#each sampleOptions as option}
+                        <option value={option.value}>{option.value}</option>
+                    {/each}
+                </select>
             </div>
             {#if isDarkModeEnabled}
                 <CodeMirror
-                    bind:value={inputState}
-                    class="font-mono text-sm h-full"
+                    bind:value={sourceState}
+                    class="font-mono text-base h-full"
                     lang={json()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -72,8 +113,8 @@
                 />
             {:else}
                 <CodeMirror
-                    bind:value={inputState}
-                    class="font-mono text-sm h-full"
+                    bind:value={sourceState}
+                    class="font-mono text-base h-full"
                     lang={json()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -82,12 +123,12 @@
         </Pane>
         <Pane>
             <div class={getBackground()}>
-                <span class={getPaneTypeClasses()}>MAPPING</span>
+                <span class={getTypeStyle()}>MAPPING</span>
             </div>
             {#if isDarkModeEnabled}
                 <CodeMirror
                     bind:value={mappingState}
-                    class="font-mono text-sm h-full"
+                    class="font-mono text-base h-full"
                     lang={javascript()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -101,7 +142,7 @@
             {:else}
                 <CodeMirror
                     bind:value={mappingState}
-                    class="font-mono text-sm h-full"
+                    class="font-mono text-base h-full"
                     lang={javascript()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -110,17 +151,17 @@
         </Pane>
         <Pane>
             <div class={getBackground()}>
-                <span class={getPaneTypeClasses()}>TARGET</span>
+                <span class={getTypeStyle()}>TARGET</span>
             </div>
             {#if isDarkModeEnabled}
-                {#await resultState then result}
+                {#await targetState then target}
                     <CodeMirror
-                        class="font-mono text-sm h-full"
+                        class="font-mono text-base h-full"
                         editable={false}
                         lang={json()}
                         lineWrapping={true}
                         extensions={[scrollPastEnd()]}
-                        value={result}
+                        value={target}
                         theme={oneDark}
                         styles={{
                             "&": {
@@ -132,14 +173,14 @@
                     <p class="text-red-700 text-lg">{error.message}</p>
                 {/await}
             {:else}
-                {#await resultState then result}
+                {#await targetState then target}
                     <CodeMirror
-                        class="font-mono text-sm h-full"
+                        class="font-mono text-base h-full"
                         editable={false}
                         lang={json()}
                         lineWrapping={true}
                         extensions={[scrollPastEnd()]}
-                        value={result}
+                        value={target}
                     />
                 {:catch error}
                     <p class="text-red-700 text-lg">{error.message}</p>

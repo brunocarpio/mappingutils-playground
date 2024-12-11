@@ -86,3 +86,19 @@ export let invoiceSample = {
   }]
 }`
 }
+
+export let itemSample = {
+  source: `{
+  "product": {
+    "id": "QL-54905",
+    "price": "USD 500"
+  }
+}`,
+  mapping: `{
+  "$.product_number": "$.product.id",
+  "$.price.currency": ["$.product.price",
+    (price) => price.split(" ")[0]],
+  "$.price.amount": ["$.product.price",
+    (price) => price.split(" ")[1]],
+}`,
+}

@@ -1,3 +1,3 @@
 export const darkMode = $state({
-    isActive: false,
+    isActive: true,
 });

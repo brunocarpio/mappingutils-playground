@@ -51,6 +51,17 @@
     let evaluator = new ScriptEvaluator();
 
     let isDarkModeEnabled = $derived(darkMode.isActive);
+
+    $effect(() => {
+        let headers = document.querySelectorAll(".section-header");
+        for (let header of headers) {
+            if (isDarkModeEnabled) {
+                header.classList.replace("light", "dark");
+            } else {
+                header.classList.replace("dark", "light");
+            }
+        }
+    });
 </script>
 
 <main>
@@ -160,6 +171,8 @@
         height: calc(100dvh - 40px);
     }
     .section-header {
+        background-color: var(--bg);
+        color: var(--text);
         padding-left: 20px;
         padding-right: 15px;
         height: 28px;
@@ -172,7 +185,9 @@
         font-weight: bold;
     }
     .section-header select {
-        border-color: var(--gray1);
+        background-color: var(--bg);
+        color: var(--text);
+        border-color: var(--bg);
         font: inherit;
     }
 </style>

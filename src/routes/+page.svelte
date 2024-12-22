@@ -51,46 +51,17 @@
     let evaluator = new ScriptEvaluator();
 
     let isDarkModeEnabled = $derived(darkMode.isActive);
-
-    let lightBackground = "bg-[#f5f5f5]";
-    let darkBackground = "bg-[#1e2021]";
-    let textGray = "text-[#e8e6e3]";
-    function getBackground() {
-        if (isDarkModeEnabled) {
-            return darkBackground;
-        } else {
-            return lightBackground;
-        }
-    }
-    function getTypeStyle() {
-        let base = "font-mono font-semibold px-5";
-        if (isDarkModeEnabled) {
-            return base + " " + textGray;
-        } else {
-            return base + " text-black";
-        }
-    }
-    function getSelectStyle() {
-        if (isDarkModeEnabled) {
-            return "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500";
-        } else {
-            return "bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500";
-        }
-    }
 </script>
 
-<div class="h-[calc(100dvh-40px)]">
+<main>
     <Splitpanes theme="custom-theme">
         <Pane>
-            <div
-                class="flex justify-between items-center pr-6 h-7 {getBackground()}"
-            >
-                <span class={getTypeStyle()}>SOURCE</span>
+            <div class="section-header light">
+                <span>SOURCE</span>
                 <select
                     name="sample"
                     bind:value={selectedState}
                     onchange={handleSelectionChange}
-                    class={getSelectStyle()}
                 >
                     {#each sampleOptions as option}
                         <option value={option.value}>{option.value}</option>
@@ -100,7 +71,6 @@
             {#if isDarkModeEnabled}
                 <CodeMirror
                     bind:value={sourceState}
-                    class="font-mono text-base h-full"
                     lang={json()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -114,7 +84,6 @@
             {:else}
                 <CodeMirror
                     bind:value={sourceState}
-                    class="font-mono text-base h-full"
                     lang={json()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -122,13 +91,12 @@
             {/if}
         </Pane>
         <Pane>
-            <div class={getBackground()}>
-                <span class={getTypeStyle()}>MAPPING</span>
+            <div class="section-header light">
+                <span>MAPPING</span>
             </div>
             {#if isDarkModeEnabled}
                 <CodeMirror
                     bind:value={mappingState}
-                    class="font-mono text-base h-full"
                     lang={javascript()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -142,7 +110,6 @@
             {:else}
                 <CodeMirror
                     bind:value={mappingState}
-                    class="font-mono text-base h-full"
                     lang={javascript()}
                     lineWrapping={true}
                     extensions={[scrollPastEnd()]}
@@ -150,13 +117,12 @@
             {/if}
         </Pane>
         <Pane>
-            <div class={getBackground()}>
-                <span class={getTypeStyle()}>TARGET</span>
+            <div class="section-header light">
+                <span>TARGET</span>
             </div>
             {#if isDarkModeEnabled}
                 {#await targetState then target}
                     <CodeMirror
-                        class="font-mono text-base h-full"
                         editable={false}
                         lang={json()}
                         lineWrapping={true}
@@ -170,12 +136,11 @@
                         }}
                     />
                 {:catch error}
-                    <p class="text-red-700 text-lg">{error.message}</p>
+                    <p>{error.message}</p>
                 {/await}
             {:else}
                 {#await targetState then target}
                     <CodeMirror
-                        class="font-mono text-base h-full"
                         editable={false}
                         lang={json()}
                         lineWrapping={true}
@@ -183,53 +148,31 @@
                         value={target}
                     />
                 {:catch error}
-                    <p class="text-red-700 text-lg">{error.message}</p>
+                    <p>{error.message}</p>
                 {/await}
             {/if}
         </Pane>
     </Splitpanes>
-</div>
+</main>
 
-<style global>
-   /* adapted from https://orefalo.github.io/svelte-splitpanes/examples/styling/splitters */ 
-    .splitpanes.custom-theme .splitpanes__pane {
-        background-color: var(--gray1);
+<style>
+    main {
+        height: calc(100dvh - 40px);
     }
-    .splitpanes.custom-theme .splitpanes__splitter {
-        background-color: var(--gray0);
-        position: relative;
+    .section-header {
+        padding-left: 20px;
+        padding-right: 15px;
+        height: 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
-    .splitpanes.custom-theme .splitpanes__splitter:before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        transition: opacity 0.4s;
-        background-color: rgb(from var(--blue) r g b / 0.3);
-        opacity: 0;
-        z-index: 1;
+    .section-header span {
+        font-family: "Liberation Mono", "Courier New", monospace;
+        font-weight: bold;
     }
-    .splitpanes.custom-theme .splitpanes__splitter:hover:before {
-        opacity: 1;
-    }
-    .splitpanes.custom-theme .splitpanes__splitter.splitpanes__splitter__active {
-        z-index: 2; /* Fix an issue of overlap fighting with a near hovered splitter */
-    }
-
-    .custom-theme.splitpanes--vertical > .splitpanes__splitter:before {
-        left: -7px;
-        right: -7px;
-        height: 100%;
-        cursor: col-resize;
-    }
-    .custom-theme.splitpanes--horizontal > .splitpanes__splitter:before {
-        top: -7px;
-        bottom: -7px;
-        width: 100%;
-        cursor: row-resize;
-    }
-
-    .cm-editor {
-        height: 100%;
+    .section-header select {
+        border-color: var(--gray1);
+        font: inherit;
     }
 </style>

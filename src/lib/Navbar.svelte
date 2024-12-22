@@ -49,10 +49,13 @@
         height: 40px;
         width: 100%;
         background-color: var(--blue);
-        padding-left: 20px;
-        padding-right: 20px;
     }
     nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        padding-left: 20px;
+        padding-right: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -73,7 +76,7 @@
             sans-serif;
         font-size: 18px;
         font-weight: 600;
-        color: var(--gray0);
+        color: var(--gray2);
     }
     .nav-links {
         display: flex;
@@ -84,6 +87,8 @@
         display: block;
     }
     .nav-links button {
+        background: none;
+        border: none;
         position: relative;
         cursor: pointer;
     }

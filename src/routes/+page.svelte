@@ -80,7 +80,7 @@
 </script>
 
 <div class="h-[calc(100dvh-40px)]">
-    <Splitpanes theme="my-theme">
+    <Splitpanes theme="custom-theme">
         <Pane>
             <div
                 class="flex justify-between items-center pr-6 h-7 {getBackground()}"
@@ -190,45 +190,43 @@
     </Splitpanes>
 </div>
 
-<style global lang="scss">
-    .splitpanes.my-theme {
-        .splitpanes__pane {
-            background-color: #edebeb;
-        }
-        .splitpanes__splitter {
-            background-color: #e8e6e3;
-            position: relative;
-            &:before {
-                content: "";
-                position: absolute;
-                left: 0;
-                top: 0;
-                transition: opacity 0.4s;
-                background-color: rgba(255, 0, 0, 0.3);
-                opacity: 0;
-                z-index: 1;
-            }
-            &:hover:before {
-                opacity: 1;
-            }
-            &.splitpanes__splitter__active {
-                z-index: 2; /* Fix an issue of overlap fighting with a near hovered splitter */
-            }
-        }
+<style global>
+   /* adapted from https://orefalo.github.io/svelte-splitpanes/examples/styling/splitters */ 
+    .splitpanes.custom-theme .splitpanes__pane {
+        background-color: var(--gray1);
     }
-    .my-theme {
-        &.splitpanes--vertical > .splitpanes__splitter:before {
-            left: -7px;
-            right: -7px;
-            height: 100%;
-            cursor: col-resize;
-        }
-        &.splitpanes--horizontal > .splitpanes__splitter:before {
-            top: -7px;
-            bottom: -7px;
-            width: 100%;
-            cursor: row-resize;
-        }
+    .splitpanes.custom-theme .splitpanes__splitter {
+        background-color: var(--gray0);
+        position: relative;
+    }
+    .splitpanes.custom-theme .splitpanes__splitter:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        transition: opacity 0.4s;
+        background-color: rgb(from var(--blue) r g b / 0.3);
+        opacity: 0;
+        z-index: 1;
+    }
+    .splitpanes.custom-theme .splitpanes__splitter:hover:before {
+        opacity: 1;
+    }
+    .splitpanes.custom-theme .splitpanes__splitter.splitpanes__splitter__active {
+        z-index: 2; /* Fix an issue of overlap fighting with a near hovered splitter */
+    }
+
+    .custom-theme.splitpanes--vertical > .splitpanes__splitter:before {
+        left: -7px;
+        right: -7px;
+        height: 100%;
+        cursor: col-resize;
+    }
+    .custom-theme.splitpanes--horizontal > .splitpanes__splitter:before {
+        top: -7px;
+        bottom: -7px;
+        width: 100%;
+        cursor: row-resize;
     }
 
     .cm-editor {

@@ -11,6 +11,6 @@ const config = {
             base: process.argv.includes("dev") ? "" : process.env.BASE_PATH,
         },
     },
-    preprocess: sveltePreprocess({ scss: true }),
+    preprocess: sveltePreprocess(),
 };
 export default config;

@@ -7,6 +7,7 @@
     --gray4: #343A40;
     --gray5: #212529;
     --blue: #0284c7;
+    --font-mono: font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 body {

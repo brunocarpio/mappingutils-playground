@@ -23,26 +23,28 @@
 
     let sampleOptions = [
         {
+            id: 0,
             value: "Item",
             source: itemSample.source,
             mapping: itemSample.mapping,
         },
         {
+            id: 1,
             value: "Invoice",
             source: invoiceSample.source,
             mapping: invoiceSample.mapping,
         },
     ];
 
-    let selectedState = $state(sampleOptions[0].value);
     let sourceState = $state(sampleOptions[0].source);
     let mappingState = $state(sampleOptions[0].mapping);
     let targetState = $derived(computeMapping());
 
-    function handleSelectionChange(event: Event) {
+    function loadMapping(event: Event) {
+        let button = event.target as HTMLButtonElement;
         let selected = sampleOptions.find(
             (option) =>
-                option.value === (event.target as HTMLSelectElement).value,
+                option.value === button.textContent,
         );
         sourceState = selected ? selected.source : "";
         mappingState = selected ? selected.mapping : "";
@@ -71,7 +73,7 @@
     <aside class="light">
         <ul>
             {#each sampleOptions as option}
-                <li><button>{option.value}</button></li>
+                <li><button onclick={loadMapping}>{option.value}</button></li>
             {/each}
         </ul>
     </aside>
@@ -80,15 +82,6 @@
             <Pane>
                 <div class="section-header light">
                     <span>SOURCE</span>
-                    <select
-                        name="sample"
-                        bind:value={selectedState}
-                        onchange={handleSelectionChange}
-                    >
-                        {#each sampleOptions as option}
-                            <option value={option.value}>{option.value}</option>
-                        {/each}
-                    </select>
                 </div>
                 {#if isDarkModeEnabled}
                     <CodeMirror
@@ -188,21 +181,14 @@
         background-color: var(--bg);
         color: var(--text);
         padding-left: 20px;
-        padding-right: 15px;
         height: 28px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        position: relative;
     }
     .section-header span {
-        font-family: "Liberation Mono", "Courier New", monospace;
+        font-family: var(--font-mono);
         font-weight: bold;
-    }
-    .section-header select {
-        background-color: var(--bg);
-        color: var(--text);
-        border-color: var(--bg);
-        font: inherit;
+        position: absolute;
+        top: 4px;
     }
     .main-container {
         width: 100%;

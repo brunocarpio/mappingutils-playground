@@ -21,30 +21,41 @@
         }
     }
 
-    let sampleOptions = [
+    let mappingList = [
         {
             id: 0,
-            value: "Item",
+            text: "Item",
             source: itemSample.source,
             mapping: itemSample.mapping,
         },
         {
             id: 1,
-            value: "Invoice",
+            text: "Invoice",
             source: invoiceSample.source,
             mapping: invoiceSample.mapping,
         },
     ];
 
-    let sourceState = $state(sampleOptions[0].source);
-    let mappingState = $state(sampleOptions[0].mapping);
+    let sourceState = $state(mappingList[0].source);
+    let mappingState = $state(mappingList[0].mapping);
     let targetState = $derived(computeMapping());
+
+    function setActiveMapping(text: string) {
+        let asideButtons = document.querySelectorAll("aside button");
+        for (let button of asideButtons) {
+            if (button.textContent === text) {
+                button.classList.add("active");
+            } else {
+                button.classList.remove("active");
+            }
+        }
+    }
 
     function loadMapping(event: Event) {
         let button = event.target as HTMLButtonElement;
-        let selected = sampleOptions.find(
-            (option) =>
-                option.value === button.textContent,
+        setActiveMapping(button.textContent as string);
+        let selected = mappingList.find(
+            (mapping) => mapping.text === button.textContent,
         );
         sourceState = selected ? selected.source : "";
         mappingState = selected ? selected.mapping : "";
@@ -72,8 +83,18 @@
 <div class="main-container">
     <aside class="light">
         <ul>
-            {#each sampleOptions as option}
-                <li><button onclick={loadMapping}>{option.value}</button></li>
+            {#each mappingList as mapping, i}
+                {#if i === 0}
+                    <li>
+                        <button class="active" onclick={loadMapping}
+                            >{mapping.text}</button
+                        >
+                    </li>
+                {:else}
+                    <li>
+                        <button onclick={loadMapping}>{mapping.text}</button>
+                    </li>
+                {/if}
             {/each}
         </ul>
     </aside>

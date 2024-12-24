@@ -18,11 +18,13 @@ body {
 
 .light {
     --bg: var(--gray0);
+    --border: var(--gray1);
     --text: var(--gray5);
 }
 
 .dark {
     --bg: var(--gray5);
+    --border: var(--gray4);
     --text: var(--gray0);
 }
 
@@ -31,7 +33,7 @@ body {
     background-color: var(--gray1);
 }
 .splitpanes.custom-theme .splitpanes__splitter {
-    background-color: var(--gray0);
+    background-color: var(--border);
     position: relative;
 }
 .splitpanes.custom-theme .splitpanes__splitter:before {

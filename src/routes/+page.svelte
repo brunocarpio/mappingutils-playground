@@ -54,18 +54,19 @@
 
     $effect(() => {
         let headers = document.querySelectorAll(".section-header");
-        for (let header of headers) {
+        let elements = [...headers, document.querySelector("#splitpanes")];
+        for (let element of elements) {
             if (isDarkModeEnabled) {
-                header.classList.replace("light", "dark");
+                element?.classList.replace("light", "dark");
             } else {
-                header.classList.replace("dark", "light");
+                element?.classList.replace("dark", "light");
             }
         }
     });
 </script>
 
 <main>
-    <Splitpanes theme="custom-theme">
+    <Splitpanes theme="custom-theme" class="light" id="splitpanes">
         <Pane>
             <div class="section-header light">
                 <span>SOURCE</span>
@@ -169,6 +170,7 @@
 <style>
     main {
         height: calc(100dvh - 40px);
+        width: 100%;
     }
     .section-header {
         background-color: var(--bg);

@@ -20,12 +20,16 @@ body {
     --bg: var(--gray0);
     --border: var(--gray1);
     --text: var(--gray5);
+    --btn-hover: var(--gray1);
+    --btn-active: var(--gray2);
 }
 
 .dark {
     --bg: var(--gray5);
     --border: var(--gray4);
     --text: var(--gray0);
+    --btn-hover: var(--gray4);
+    --btn-active: var(--gray3);
 }
 
 /* adapted from https://orefalo.github.io/svelte-splitpanes/examples/styling/splitters */ 

@@ -41,24 +41,34 @@
     let targetState = $derived(computeMapping());
 
     function setActiveMapping(text: string) {
-        let asideButtons = document.querySelectorAll("aside button");
-        for (let button of asideButtons) {
-            if (button.textContent === text) {
-                button.classList.add("active");
-            } else {
-                button.classList.remove("active");
+        let ul = document.querySelector("#mappings");
+        if (ul?.children) {
+            for (let li of ul.children) {
+                let textButton = li.firstElementChild;
+                if (textButton?.textContent === text) {
+                    li.classList.add("active");
+                } else {
+                    li.classList.remove("active");
+                }
             }
         }
     }
 
     function loadMapping(event: Event) {
         let button = event.target as HTMLButtonElement;
-        setActiveMapping(button.textContent as string);
-        let selected = mappingList.find(
-            (mapping) => mapping.text === button.textContent,
-        );
-        sourceState = selected ? selected.source : "";
-        mappingState = selected ? selected.mapping : "";
+        if (button && button.textContent && button.parentElement) {
+            setActiveMapping(button.textContent);
+            let selected;
+            for (let mapping of mappingList) {
+                if (mapping.text === button.textContent) {
+                    selected = mapping;
+                }
+            }
+            if (selected) {
+                sourceState = selected.source;
+                mappingState = selected.mapping;
+            }
+        }
     }
 
     let evaluator = new ScriptEvaluator();
@@ -82,17 +92,19 @@
 
 <div class="main-container">
     <aside class="light">
-        <ul>
+        <ul id="mappings">
             {#each mappingList as mapping, i}
                 {#if i === 0}
-                    <li>
-                        <button class="active" onclick={loadMapping}
-                            >{mapping.text}</button
-                        >
+                    <li class="active">
+                        <button onclick={loadMapping}>
+                            {mapping.text}
+                        </button>
+                        <button>&#x22EE;</button>
                     </li>
                 {:else}
                     <li>
                         <button onclick={loadMapping}>{mapping.text}</button>
+                        <button>&#x22EE;</button>
                     </li>
                 {/if}
             {/each}
@@ -227,23 +239,30 @@
         padding: 0;
     }
     aside ul li {
+        display: flex;
+        justify-content: space-between;
         margin-bottom: 10px;
+        background: none;
+        transition: background-color 0.3s;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    aside ul li:hover {
+        background-color: var(--btn-hover);
+    }
+    aside ul li.active {
+        background-color: var(--btn-active);
+    }
+    aside ul li button:first-child {
+        width: 100%;
     }
     aside ul li button {
-        width: 100%;
         padding: 10px;
         border: none;
-        border-radius: 8px;
         background: none;
         color: var(--text);
         cursor: pointer;
         text-align: left;
         transition: background-color 0.3s;
-    }
-    aside ul li button:hover {
-        background-color: var(--btn-hover);
-    }
-    aside ul li button.active {
-        background-color: var(--btn-active);
     }
 </style>

@@ -6,6 +6,7 @@
     --gray3: #495057;
     --gray4: #343A40;
     --gray5: #212529;
+    --gray6: #0b090a;
     --blue: #0284c7;
     --font-mono: font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
@@ -23,6 +24,7 @@ body {
     --text: var(--gray5);
     --btn-hover: var(--gray1);
     --btn-active: var(--gray2);
+    --nav-bg: var(--blue);
 }
 
 .dark {
@@ -31,6 +33,7 @@ body {
     --text: var(--gray0);
     --btn-hover: var(--gray4);
     --btn-active: var(--gray3);
+    --nav-bg: var(--gray6);
 }
 
 /* adapted from https://orefalo.github.io/svelte-splitpanes/examples/styling/splitters */ 

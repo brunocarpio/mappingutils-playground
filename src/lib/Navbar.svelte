@@ -1,13 +1,21 @@
 <script>
-    import ghCat from "$lib/assets/github-mark.svg";
-    import npmLogo from "$lib/assets/npm.svg";
+    import ghCatWhite from "$lib/assets/github-mark-white.svg";
     import { darkMode } from "$lib/shared.svelte.js";
+    let isDarkModeEnabled = $derived(darkMode.isActive);
     function handlePress() {
         darkMode.isActive = !darkMode.isActive;
     }
+    $effect(() => {
+        let navbar = document.querySelector("#navbar");
+        if (isDarkModeEnabled) {
+            navbar?.classList.replace("light", "dark");
+        } else {
+            navbar?.classList.replace("dark", "light");
+        }
+    });
 </script>
 
-<nav>
+<nav class="dark" id="navbar">
     <ul>
         <li class="nav-title">mappingutils</li>
         <li class="nav-links">
@@ -32,13 +40,10 @@
                     </svg>
                 {/if}
             </button>
-            <a href="https://www.npmjs.com/package/mappingutils" target="_blank"
-                ><img src={npmLogo} width={50} alt="npm logo" /></a
-            >
             <a
                 href="https://github.com/brunocarpio/mappingutils"
                 target="_blank"
-                ><img src={ghCat} alt="github cat logo" width={30} /></a
+                ><img src={ghCatWhite} alt="github cat logo" width={30} /></a
             >
         </li>
     </ul>
@@ -48,7 +53,7 @@
     nav {
         height: 40px;
         width: 100%;
-        background-color: var(--blue);
+        background-color: var(--nav-bg);
     }
     nav ul {
         list-style-type: none;
@@ -98,6 +103,6 @@
         height: 16px;
     }
     .nav-links path {
-        fill: var(--gray0);
+        fill: var(--gray1);
     }
 </style>

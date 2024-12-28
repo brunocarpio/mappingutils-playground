@@ -99,12 +99,18 @@
                         <button onclick={loadMapping}>
                             {mapping.text}
                         </button>
-                        <button>&#x22EE;</button>
+                        <button class="tooltip">
+                            &#x22EE;
+                            <span class="tooltip_text">Options</span>
+                        </button>
                     </li>
                 {:else}
                     <li>
                         <button onclick={loadMapping}>{mapping.text}</button>
-                        <button>&#x22EE;</button>
+                        <button class="tooltip">
+                            &#x22EE;
+                            <span class="tooltip_text">Options</span>
+                        </button>
                     </li>
                 {/if}
             {/each}
@@ -264,5 +270,44 @@
         cursor: pointer;
         text-align: left;
         transition: background-color 0.3s;
+    }
+    aside ul li button.tooltip {
+        border-radius: 8px;
+        position: relative;
+        display: inline-block;
+    }
+    aside ul li button.tooltip:hover {
+        background-color: var(--btn-hover);
+    }
+    aside ul li button.tooltip .tooltip_text {
+        visibility: hidden;
+        width: 70px;
+        background-color: var(--gray6);
+        color: var(--gray0);
+        text-align: center;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        padding: 8px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -35px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    aside ul li button.tooltip .tooltip_text::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: var(--gray6) transparent transparent transparent;
+    }
+    aside ul li button.tooltip:hover .tooltip_text {
+        visibility: visible;
+        opacity: 1;
     }
 </style>

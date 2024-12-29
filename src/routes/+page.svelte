@@ -94,22 +94,20 @@
     <aside class="light">
         <ul id="mappings">
             {#each mappingList as mapping, i}
-                <li class={i === 0 ? "active" : ""}>
-                    <button onclick={loadMapping}>
+                <li class={i === 0 ? "active mapping-li" : "mapping-li"}>
+                    <button onclick={loadMapping} class="mapping-text">
                         {mapping.text}
                     </button>
-                    <button class="tooltip">
-                        &#x22EE;
-                        <span class="tooltip-text">Options</span>
-                        <ul class="menu_dropdown">
-                            <li>
-                                <span>Rename</span>
-                            </li>
-                            <li class="btn-delete">
-                                <span>Delete</span>
-                            </li>
-                        </ul>
-                    </button>
+                    <button class="tooltip"> &#x22EE; </button>
+                    <span class="tooltip-text">Options</span>
+                    <ul class="menu_dropdown">
+                        <li>
+                            <button>Rename</button>
+                        </li>
+                        <li>
+                            <button class="btn-delete">Delete</button>
+                        </li>
+                    </ul>
                 </li>
             {/each}
         </ul>
@@ -242,7 +240,7 @@
         margin: 0;
         padding: 0;
     }
-    aside ul li {
+    aside ul li.mapping-li {
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
@@ -250,49 +248,46 @@
         transition: background-color 0.3s;
         border-radius: 8px;
         cursor: pointer;
+        position: relative;
     }
-    aside ul li:hover {
+    aside ul li.mapping-li:hover {
         background-color: rgb(from var(--btn-hover) r g b / 0.5);
     }
-    aside ul li.active {
+    aside ul li.mapping-li.active {
         background-color: var(--btn-hover);
     }
-    aside ul li button:first-child {
+    aside ul li button.mapping-text {
         width: 100%;
     }
     aside ul li button {
-        padding: 10px;
-        border: none;
         background: none;
+        border: none;
         color: var(--text);
         cursor: pointer;
+        padding: 10px;
         text-align: left;
         transition: background-color 0.3s;
     }
-    aside ul li button.tooltip {
-        border-radius: 8px;
-        position: relative;
-        display: inline-block;
-    }
-    aside ul li button.tooltip .tooltip-text {
-        visibility: hidden;
-        width: 70px;
-        font-weight: 550;
+    aside ul li button.tooltip + span.tooltip-text {
         background-color: var(--gray9);
-        color: var(--gray0);
-        text-align: center;
         border-radius: 6px;
         border: 1px solid var(--border);
-        padding: 10px 0;
-        position: absolute;
-        z-index: 1;
         bottom: 125%;
-        left: 50%;
+        color: var(--gray0);
+        font-size: 14px;
+        font-weight: 600;
+        left: 90%;
         margin-left: -35px;
         opacity: 0;
+        padding: 6px 0;
+        position: absolute;
+        text-align: center;
         transition: opacity 0.3s;
+        visibility: hidden;
+        width: 70px;
+        z-index: 1;
     }
-    aside ul li button.tooltip .tooltip-text::after {
+    aside ul li button.tooltip + span.tooltip-text::after {
         content: "";
         position: absolute;
         top: 100%;
@@ -300,19 +295,21 @@
         margin-left: -5px;
         border-width: 5px;
         border-style: solid;
-        border-color: var(--gray9) transparent transparent transparent;
+        border-color: var(--gray7) transparent transparent transparent;
     }
-    aside ul li button.tooltip:hover .tooltip-text {
+    aside ul li button.tooltip:hover + span.tooltip-text {
         visibility: visible;
         opacity: 1;
     }
 
-    aside ul li button ul.menu_dropdown {
+    aside ul li ul.menu_dropdown {
         background-color: var(--border);
-        border-radius: 8px;
+        border-radius: 16px;
         border: 1px solid var(--menu-border);
+        top: 70%;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         color: var(--text);
+        left: 80%;
         list-style: none;
         margin: 3px 0 0 0;
         padding: 10px;
@@ -322,14 +319,14 @@
         width: 100px;
         z-index: 1;
     }
-    aside ul li button.tooltip:focus .menu_dropdown {
+    aside ul li button.tooltip:focus ~ ul.menu_dropdown {
         visibility: visible;
     }
-    aside ul li button ul.menu_dropdown li {
-        padding: 12px;
+    aside ul li ul.menu_dropdown li {
+        border-radius: 4px;
         margin: 0;
     }
-    aside ul li button ul.menu_dropdown li:hover {
+    aside ul li ul.menu_dropdown li:hover {
         background-color: var(--menu-border);
     }
     .btn-delete {

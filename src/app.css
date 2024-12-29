@@ -3,11 +3,17 @@
     --gray0: #F8F9FA;
     --gray1: #E9ECEF;
     --gray2: #DEE2E6;
-    --gray3: #495057;
-    --gray4: #343A40;
-    --gray5: #212529;
-    --gray6: #0b090a;
+    --gray3: #CED4DA;
+    --gray4: #ADB5BD;
+    --gray5: #6C757D;
+    --gray6: #495057;
+    --gray7: #343A40;
+    --gray8: #212529;
+    --gray9: #16181b;
+    --gray10: #0a0c0d;
+    --gray11: #000000;
     --blue: #0284c7;
+    --red: #FF5252;
     --font-mono: font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -21,19 +27,19 @@ body {
 .light {
     --bg: var(--gray0);
     --border: var(--gray1);
-    --text: var(--gray5);
+    --menu-border: var(--gray2);
+    --text: var(--gray6);
     --btn-hover: var(--gray1);
-    --btn-active: var(--gray2);
     --nav-bg: var(--blue);
 }
 
 .dark {
-    --bg: var(--gray5);
-    --border: var(--gray4);
-    --text: var(--gray0);
-    --btn-hover: var(--gray4);
-    --btn-active: var(--gray3);
-    --nav-bg: var(--gray6);
+    --bg: var(--gray9);
+    --border: var(--gray7);
+    --menu-border: var(--gray6);
+    --text: var(--gray1);
+    --btn-hover: var(--gray8);
+    --nav-bg: var(--gray11);
 }
 
 /* adapted from https://orefalo.github.io/svelte-splitpanes/examples/styling/splitters */ 

@@ -100,7 +100,7 @@
                     </button>
                     <button class="tooltip"> &#x22EE; </button>
                     <span class="tooltip-text">Options</span>
-                    <ul class="menu_dropdown">
+                    <ul class="menu-dropdown">
                         <li>
                             <button>Rename</button>
                         </li>
@@ -302,7 +302,7 @@
         opacity: 1;
     }
 
-    aside ul li ul.menu_dropdown {
+    aside ul li ul.menu-dropdown {
         background-color: var(--border);
         border-radius: 16px;
         border: 1px solid var(--menu-border);
@@ -319,14 +319,14 @@
         width: 100px;
         z-index: 1;
     }
-    aside ul li button.tooltip:focus ~ ul.menu_dropdown {
+    aside ul li button.tooltip:focus ~ ul.menu-dropdown {
         visibility: visible;
     }
-    aside ul li ul.menu_dropdown li {
+    aside ul li ul.menu-dropdown li {
         border-radius: 4px;
         margin: 0;
     }
-    aside ul li ul.menu_dropdown li:hover {
+    aside ul li ul.menu-dropdown li:hover {
         background-color: var(--menu-border);
     }
     .btn-delete {

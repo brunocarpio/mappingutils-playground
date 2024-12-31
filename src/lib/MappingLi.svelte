@@ -11,6 +11,7 @@
 
     let menu: HTMLUListElement;
     let popoverButton: HTMLButtonElement;
+    let textButton: HTMLInputElement;
 
     $effect(() => {
         popoverButton.popoverTargetElement = menu;
@@ -18,11 +19,43 @@
         menu.style.top = `${rect.bottom - 10}px`;
         menu.style.left = `${rect.right - 25}px`;
     });
+
+    function renameHandler() {
+        menu.hidePopover();
+        textButton.type = "text";
+        textButton.setSelectionRange(
+            textButton.value.length,
+            textButton.value.length,
+        );
+        textButton.focus({ focusVisible: true });
+    }
+
+    function focusOutHandler() {
+        textButton.type = "button";
+    }
+
+    function keyDownHandler(e: KeyboardEvent) {
+        if (e.key === "Enter") {
+            textButton.blur();
+        }
+    }
 </script>
 
 <li class="mapping-li" class:active>
-    <button class="button-text" onclick={loadHandler}>{text}</button>
-    <button class="tooltip" bind:this={popoverButton} aria-label="options-button">
+    <input
+        type="button"
+        class="button-text"
+        onclick={loadHandler}
+        onfocusout={focusOutHandler}
+        onkeydown={keyDownHandler}
+        bind:this={textButton}
+        value={text}
+    />
+    <button
+        class="tooltip"
+        bind:this={popoverButton}
+        aria-label="options-button"
+    >
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -39,7 +72,7 @@
     <span class="tooltip-text">Options</span>
     <ul class="menu" popover="auto" bind:this={menu}>
         <li>
-            <button onclick={() => console.log("A")}>Rename</button>
+            <button onclick={renameHandler}>Rename</button>
         </li>
         <li>
             <button class="button-delete">Delete</button>
@@ -48,7 +81,8 @@
 </li>
 
 <style>
-    button {
+    button,
+    input.button-text {
         background: none;
         border: none;
         color: var(--text);
@@ -57,7 +91,7 @@
         text-align: left;
         transition: background-color 0.3s;
     }
-    button.button-text {
+    input.button-text {
         width: 100%;
     }
     li.mapping-li {

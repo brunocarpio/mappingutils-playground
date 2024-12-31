@@ -22,7 +22,7 @@
         }
     }
 
-    let mappingList = [
+    let mappingList = $state([
         {
             id: 0,
             text: "Item",
@@ -35,7 +35,7 @@
             source: invoiceSample.source,
             mapping: invoiceSample.mapping,
         },
-    ];
+    ]);
 
     let sourceState = $state(mappingList[0].source);
     let mappingState = $state(mappingList[0].mapping);
@@ -45,8 +45,8 @@
         let ul = document.querySelector("#mappings");
         if (ul?.children) {
             for (let li of ul.children) {
-                let textButton = li.firstElementChild;
-                if (textButton?.textContent === text) {
+                let textButton = li.firstElementChild as HTMLInputElement;
+                if (textButton?.value === text) {
                     li.classList.add("active");
                 } else {
                     li.classList.remove("active");
@@ -56,12 +56,12 @@
     }
 
     function loadMapping(event: Event) {
-        let button = event.target as HTMLButtonElement;
-        if (button && button.textContent && button.parentElement) {
-            setActiveMapping(button.textContent);
+        let button = event.target as HTMLInputElement;
+        if (button && button.value && button.parentElement) {
+            setActiveMapping(button.value);
             let selected;
             for (let mapping of mappingList) {
-                if (mapping.text === button.textContent) {
+                if (mapping.text === button.value) {
                     selected = mapping;
                 }
             }

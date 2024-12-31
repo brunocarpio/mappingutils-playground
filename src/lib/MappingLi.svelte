@@ -7,7 +7,7 @@
         loadHandler: MouseEventHandler<HTMLElement>;
     }
 
-    let { text, active, loadHandler }: Props = $props();
+    let { text = $bindable(), active, loadHandler }: Props = $props();
 
     let menu: HTMLUListElement;
     let popoverButton: HTMLButtonElement;
@@ -39,30 +39,37 @@
             textButton.blur();
         }
     }
+
+    function changeHandler() {
+        if (text === "") {
+            text = "New Mapping";
+        }
+    }
 </script>
 
 <li class="mapping-li" class:active>
     <input
-        type="button"
+        bind:this={textButton}
+        bind:value={text}
         class="button-text"
         onclick={loadHandler}
         onfocusout={focusOutHandler}
         onkeydown={keyDownHandler}
-        bind:this={textButton}
-        value={text}
+        onchange={changeHandler}
+        type="button"
     />
     <button
-        class="tooltip"
-        bind:this={popoverButton}
         aria-label="options-button"
+        bind:this={popoverButton}
+        class="tooltip"
     >
         <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 30 30"
             fill="currentColor"
+            height="18"
             transform="translate(0 4)"
+            viewBox="0 0 30 30"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
         >
             <circle cx="5" cy="12" r="2" />
             <circle cx="12" cy="12" r="2" />

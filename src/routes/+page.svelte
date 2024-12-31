@@ -37,6 +37,8 @@
         },
     ]);
 
+    $inspect(mappingList.map(ul => ul.text));
+
     let sourceState = $state(mappingList[0].source);
     let mappingState = $state(mappingList[0].mapping);
     let targetState = $derived(computeMapping());
@@ -96,7 +98,7 @@
         <ul id="mappings">
             {#each mappingList as mapping, i (mapping.id)}
                 <MappingLi
-                    text={mapping.text}
+                    bind:text={mapping.text}
                     active={i === 0 ? true : false}
                     loadHandler={loadMapping}
                 />

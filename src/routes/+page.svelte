@@ -41,12 +41,12 @@
     let mappingState = $state(mappingList[0].mapping);
     let targetState = $derived(computeMapping());
 
-    function setActiveMapping(text: string) {
+    function setActiveMapping(index: string) {
         let ul = document.querySelector("#mappings");
         if (ul?.children) {
             for (let li of ul.children) {
                 let textButton = li.firstElementChild as HTMLInputElement;
-                if (textButton?.value === text) {
+                if (textButton?.dataset.id === index) {
                     li.classList.add("active");
                 } else {
                     li.classList.remove("active");
@@ -57,11 +57,12 @@
 
     function loadMapping(event: Event) {
         let button = event.target as HTMLInputElement;
+        let index = button.dataset.id ?? "";
         if (button && button.value && button.parentElement) {
-            setActiveMapping(button.value);
+            setActiveMapping(index);
             let selected;
             for (let mapping of mappingList) {
-                if (mapping.text === button.value) {
+                if (mapping.id === Number.parseInt(index)) {
                     selected = mapping;
                 }
             }
@@ -96,8 +97,9 @@
         <ul id="mappings">
             {#each mappingList as mapping, i (mapping.id)}
                 <MappingLi
-                    bind:text={mapping.text}
                     active={i === 0 ? true : false}
+                    bind:text={mapping.text}
+                    id={i}
                     loadHandler={loadMapping}
                 />
             {/each}

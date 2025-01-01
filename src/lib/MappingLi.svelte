@@ -2,12 +2,13 @@
     import type { MouseEventHandler } from "svelte/elements";
 
     interface Props {
-        text: string;
         active: boolean;
+        id: number;
         loadHandler: MouseEventHandler<HTMLElement>;
+        text: string;
     }
 
-    let { text = $bindable(), active, loadHandler }: Props = $props();
+    let { text = $bindable(), active, loadHandler, id }: Props = $props();
 
     let menu: HTMLUListElement;
     let popoverButton: HTMLButtonElement;
@@ -52,6 +53,7 @@
         bind:this={textButton}
         bind:value={text}
         class="button-text"
+        data-id={id}
         onclick={loadHandler}
         onfocusout={focusOutHandler}
         onkeydown={keyDownHandler}

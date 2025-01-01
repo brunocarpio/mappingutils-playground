@@ -56,6 +56,8 @@
         onfocusout={focusOutHandler}
         onkeydown={keyDownHandler}
         onchange={changeHandler}
+        placeholder="New Mapping"
+        size=20
         type="button"
     />
     <button
@@ -99,16 +101,16 @@
         transition: background-color 0.3s;
     }
     input.button-text {
-        width: 100%;
+        width: 70%;
     }
     li.mapping-li {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
         background: none;
-        transition: background-color 0.3s;
         border-radius: 8px;
+        display: flex;
+        margin-bottom: 10px;
         position: relative;
+        transition: background-color 0.3s;
+        width: inherit;
     }
     li.mapping-li:hover {
         background-color: rgb(from var(--btn-hover) r g b / 0.5);
@@ -124,7 +126,7 @@
         color: var(--gray0);
         font-size: 14px;
         font-weight: 600;
-        left: 90%;
+        left: 82%;
         margin-left: -35px;
         opacity: 0;
         padding: 6px 0;

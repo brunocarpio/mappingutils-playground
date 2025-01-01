@@ -37,8 +37,6 @@
         },
     ]);
 
-    $inspect(mappingList.map(ul => ul.text));
-
     let sourceState = $state(mappingList[0].source);
     let mappingState = $state(mappingList[0].mapping);
     let targetState = $derived(computeMapping());
@@ -208,8 +206,8 @@
     .section-header {
         background-color: var(--bg);
         color: var(--text);
-        padding-left: 20px;
         height: 28px;
+        padding-left: 20px;
         position: relative;
     }
     .section-header span {
@@ -219,18 +217,19 @@
         top: 4px;
     }
     .main-container {
-        width: 100%;
         display: flex;
+        width: 100%;
     }
     aside {
         background-color: var(--bg);
-        width: 150px;
         border-right: 1px solid var(--border);
         padding: 20px 5px;
+        width: 150px;
     }
     aside ul {
         list-style: none;
         margin: 0;
         padding: 0;
+        width: inherit;
     }
 </style>

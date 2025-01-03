@@ -3,12 +3,19 @@
 
     interface Props {
         active: boolean;
+        deleteHandler: MouseEventHandler<HTMLElement>;
         id: number;
         loadHandler: MouseEventHandler<HTMLElement>;
         text: string;
     }
 
-    let { text = $bindable(), active, loadHandler, id }: Props = $props();
+    let {
+        active,
+        deleteHandler,
+        id,
+        loadHandler,
+        text = $bindable(),
+    }: Props = $props();
 
     let menu: HTMLUListElement;
     let popoverButton: HTMLButtonElement;
@@ -16,19 +23,19 @@
 
     $effect(() => {
         popoverButton.popoverTargetElement = menu;
+        computeMenuLocation();
+    });
+
+    function changeHandler() {
+        if (text === "") {
+            text = "New Mapping";
+        }
+    }
+
+    export function computeMenuLocation() {
         let rect = popoverButton.getBoundingClientRect();
         menu.style.top = `${rect.bottom - 10}px`;
         menu.style.left = `${rect.right - 25}px`;
-    });
-
-    function renameHandler() {
-        menu.hidePopover();
-        textButton.type = "text";
-        textButton.setSelectionRange(
-            textButton.value.length,
-            textButton.value.length,
-        );
-        textButton.focus({ focusVisible: true });
     }
 
     function focusOutHandler() {
@@ -41,10 +48,14 @@
         }
     }
 
-    function changeHandler() {
-        if (text === "") {
-            text = "New Mapping";
-        }
+    function renameHandler() {
+        menu.hidePopover();
+        textButton.type = "text";
+        textButton.setSelectionRange(
+            textButton.value.length,
+            textButton.value.length,
+        );
+        textButton.focus({ focusVisible: true });
     }
 </script>
 
@@ -59,7 +70,7 @@
         onkeydown={keyDownHandler}
         onchange={changeHandler}
         placeholder="New Mapping"
-        size=20
+        size="20"
         type="button"
     />
     <button
@@ -86,7 +97,8 @@
             <button onclick={renameHandler}>Rename</button>
         </li>
         <li>
-            <button class="button-delete">Delete</button>
+            <button class="button-delete" onclick={deleteHandler}>Delete</button
+            >
         </li>
     </ul>
 </li>

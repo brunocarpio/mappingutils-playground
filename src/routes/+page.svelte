@@ -8,19 +8,7 @@
     import ScriptEvaluator from "$lib/ScriptEvaluator";
     import { darkMode } from "$lib/shared.svelte.js";
     import { oneDark } from "@codemirror/theme-one-dark";
-    import MappingLi from "$lib/MappingLi.svelte";
-
-    async function computeMapping() {
-        try {
-            let target = await evaluator.evalAsync({
-                source: sourceState,
-                mapping: mappingState,
-            });
-            return JSON.stringify(target, null, 2);
-        } catch (err: any) {
-            return err.toString();
-        }
-    }
+    import Aside from "$lib/Aside.svelte";
 
     let mappingList = $state([
         {
@@ -41,72 +29,47 @@
     let mappingState = $state(mappingList[0].mapping);
     let targetState = $derived(computeMapping());
 
-    function setActiveMapping(index: string) {
-        let ul = document.querySelector("#mappings");
-        if (ul?.children) {
-            for (let li of ul.children) {
-                let textButton = li.firstElementChild as HTMLInputElement;
-                if (textButton?.dataset.id === index) {
-                    li.classList.add("active");
-                } else {
-                    li.classList.remove("active");
-                }
-            }
-        }
-    }
-
-    function loadMapping(event: Event) {
-        let button = event.target as HTMLInputElement;
-        let index = button.dataset.id ?? "";
-        if (button && button.value && button.parentElement) {
-            setActiveMapping(index);
-            let selected;
-            for (let mapping of mappingList) {
-                if (mapping.id === Number.parseInt(index)) {
-                    selected = mapping;
-                }
-            }
-            if (selected) {
-                sourceState = selected.source;
-                mappingState = selected.mapping;
-            }
-        }
-    }
-
     let evaluator = new ScriptEvaluator();
 
     let isDarkModeEnabled = $derived(darkMode.isActive);
 
+    async function computeMapping() {
+        try {
+            let target = await evaluator.evalAsync({
+                source: sourceState,
+                mapping: mappingState,
+            });
+            return JSON.stringify(target, null, 2);
+        } catch (err: any) {
+            return err.toString();
+        }
+    }
+
     $effect(() => {
         let headers = document.querySelectorAll(".section-header");
-        let splitpanes = document.querySelector("#splitpanes");
-        let sidebar = document.querySelector("aside");
-        let elements = [...headers, splitpanes, sidebar];
-        for (let element of elements) {
+        for (let header of headers) {
             if (isDarkModeEnabled) {
-                element?.classList.replace("light", "dark");
+                header?.classList.replace("light", "dark");
             } else {
-                element?.classList.replace("dark", "light");
+                header?.classList.replace("dark", "light");
             }
         }
     });
 </script>
 
 <div class="main-container">
-    <aside class="light">
-        <ul id="mappings">
-            {#each mappingList as mapping, i (mapping.id)}
-                <MappingLi
-                    active={i === 0 ? true : false}
-                    bind:text={mapping.text}
-                    id={i}
-                    loadHandler={loadMapping}
-                />
-            {/each}
-        </ul>
-    </aside>
+    <Aside
+        bind:mappingList
+        bind:sourceState
+        bind:mappingState
+        darkMode={isDarkModeEnabled}
+    />
     <main>
-        <Splitpanes theme="custom-theme" class="light" id="splitpanes">
+        <Splitpanes
+            theme="custom-theme"
+            class={isDarkModeEnabled ? "dark" : "light"}
+            id="splitpanes"
+        >
             <Pane>
                 <div class="section-header light">
                     <span>SOURCE</span>
@@ -221,17 +184,5 @@
     .main-container {
         display: flex;
         width: 100%;
-    }
-    aside {
-        background-color: var(--bg);
-        border-right: 1px solid var(--border);
-        padding: 20px 5px;
-        width: 150px;
-    }
-    aside ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        width: inherit;
     }
 </style>

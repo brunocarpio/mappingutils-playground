@@ -10,15 +10,17 @@
     import { oneDark } from "@codemirror/theme-one-dark";
     import Aside from "$lib/Aside.svelte";
 
+    let crypto = globalThis.crypto;
+
     let mappingList = $state([
         {
-            id: 0,
+            id: crypto.randomUUID(),
             text: "Item",
             source: itemSample.source,
             mapping: itemSample.mapping,
         },
         {
-            id: 1,
+            id: crypto.randomUUID(),
             text: "Invoice",
             source: invoiceSample.source,
             mapping: invoiceSample.mapping,

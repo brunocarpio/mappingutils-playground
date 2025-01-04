@@ -2,7 +2,7 @@
     import MappingLi from "$lib/MappingLi.svelte";
 
     interface Mapping {
-        id: number;
+        id: string;
         mapping: string;
         source: string;
         text: string;
@@ -25,7 +25,7 @@
     let _refs: MappingLi[] = $state([]);
     let mappingLiGroup = $derived(_refs.filter(Boolean));
 
-    function deleteMapping(id: number) {
+    function deleteMapping(id: string) {
         let i = 0;
         for (i = 0; i < mappingList.length; i++) {
             if (mappingList[i].id === id) {
@@ -50,7 +50,7 @@
     function loadMappingId(id: string) {
         setActiveMapping(id);
         let selected = mappingList.find(
-            (mapping) => mapping.id === Number.parseInt(id),
+            (mapping) => mapping.id === id,
         );
         if (selected) {
             sourceState = selected.source;

@@ -4,7 +4,7 @@
     interface Props {
         active: boolean;
         deleteHandler: MouseEventHandler<HTMLElement>;
-        id: number;
+        id: string;
         loadHandler: MouseEventHandler<HTMLElement>;
         text: string;
     }

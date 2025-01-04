@@ -24,6 +24,21 @@
 
     let _refs: MappingLi[] = $state([]);
     let mappingLiGroup = $derived(_refs.filter(Boolean));
+    let crypto = globalThis.crypto;
+
+    let addingMapping = $state(false);
+
+    function addMapping() {
+        let id = crypto.randomUUID();
+        mappingList.unshift({
+            id,
+            mapping: "",
+            source: "",
+            text: "",
+        });
+        loadMappingId(id);
+        addingMapping = true;
+    }
 
     function deleteMapping(id: string) {
         let i = 0;
@@ -49,21 +64,19 @@
 
     function loadMappingId(id: string) {
         setActiveMapping(id);
-        let selected = mappingList.find(
-            (mapping) => mapping.id === id,
-        );
+        let selected = mappingList.find((mapping) => mapping.id === id);
         if (selected) {
             sourceState = selected.source;
             mappingState = selected.mapping;
         }
     }
 
-    function setActiveMapping(index: string) {
+    function setActiveMapping(id: string) {
         let ul = document.querySelector("#mappings");
         if (ul?.children) {
             for (let li of ul.children) {
                 let textButton = li.firstElementChild as HTMLInputElement;
-                if (textButton?.dataset.id === index) {
+                if (textButton?.dataset.id === id) {
                     li.classList.add("active");
                 } else {
                     li.classList.remove("active");
@@ -77,11 +90,18 @@
             mapping.computeMenuLocation();
         }
     });
+
+    $effect(() => {
+        if (addingMapping) {
+            mappingLiGroup[0].renameHandler();
+            addingMapping = false;
+        }
+    });
 </script>
 
 <aside class={darkMode ? "dark" : "light"}>
     <div>
-        <button aria-label="Add New Mapping">
+        <button aria-label="Add New Mapping" onclick={addMapping}>
             <svg
                 viewBox="0 0 24 24"
                 width="25px"

@@ -44,11 +44,14 @@
 
     function keyDownHandler(e: KeyboardEvent) {
         if (e.key === "Enter") {
+            if (text === "") {
+                text = "New Mapping";
+            }
             textButton.blur();
         }
     }
 
-    function renameHandler() {
+    export function renameHandler() {
         menu.hidePopover();
         textButton.type = "text";
         textButton.setSelectionRange(

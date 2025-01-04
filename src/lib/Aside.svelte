@@ -100,8 +100,12 @@
 </script>
 
 <aside class={darkMode ? "dark" : "light"}>
-    <div>
-        <button aria-label="Add New Mapping" onclick={addMapping}>
+    <div class="edit-container">
+        <button
+            aria-label="Add New Mapping"
+            class="tooltip"
+            onclick={addMapping}
+        >
             <svg
                 viewBox="0 0 24 24"
                 width="25px"
@@ -117,6 +121,7 @@
                 ></path>
             </svg>
         </button>
+        <span class="tooltip-text">New mapping</span>
     </div>
     <ul id="mappings">
         {#each mappingList as mapping, i (mapping.id)}
@@ -170,5 +175,41 @@
         stroke-width: 2;
         stroke-linecap: round;
         stroke-linejoin: round;
+    }
+    .edit-container {
+        position: relative;
+    }
+    span.tooltip-text {
+        background-color: var(--gray9);
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        top: 120%;
+        color: var(--gray0);
+        font-size: 14px;
+        font-weight: 600;
+        left: 77%;
+        margin-left: -35px;
+        opacity: 0;
+        padding: 6px 0;
+        position: absolute;
+        text-align: center;
+        transition: opacity 0.3s;
+        visibility: hidden;
+        width: 100px;
+        z-index: 1;
+    }
+    span.tooltip-text::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent var(--gray7) transparent;
+    }
+    button.tooltip:hover + span.tooltip-text {
+        visibility: visible;
+        opacity: 1;
     }
 </style>

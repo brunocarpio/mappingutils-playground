@@ -46,17 +46,6 @@
             return err.toString();
         }
     }
-
-    $effect(() => {
-        let headers = document.querySelectorAll(".section-header");
-        for (let header of headers) {
-            if (isDarkModeEnabled) {
-                header?.classList.replace("light", "dark");
-            } else {
-                header?.classList.replace("dark", "light");
-            }
-        }
-    });
 </script>
 
 <div class="main-container">
@@ -68,98 +57,84 @@
     />
     <main>
         <Splitpanes
-            theme="custom-theme"
             class={isDarkModeEnabled ? "dark" : "light"}
             id="splitpanes"
+            theme="custom-theme"
         >
             <Pane>
-                <div class="section-header light">
+                <div
+                    class="section-header {isDarkModeEnabled
+                        ? 'dark'
+                        : 'light'}"
+                >
                     <span>SOURCE</span>
                 </div>
-                {#if isDarkModeEnabled}
-                    <CodeMirror
-                        bind:value={sourceState}
-                        lang={json()}
-                        lineWrapping={true}
-                        extensions={[scrollPastEnd()]}
-                        theme={oneDark}
-                        styles={{
-                            "&": {
-                                "scrollbar-color": "#9ca3af rgb(54, 59, 61)",
-                            },
-                        }}
-                    />
-                {:else}
-                    <CodeMirror
-                        bind:value={sourceState}
-                        lang={json()}
-                        lineWrapping={true}
-                        extensions={[scrollPastEnd()]}
-                    />
-                {/if}
+                <CodeMirror
+                    bind:value={sourceState}
+                    lang={json()}
+                    lineWrapping={true}
+                    extensions={[scrollPastEnd()]}
+                    theme={isDarkModeEnabled ? oneDark : null}
+                    styles={isDarkModeEnabled
+                        ? {
+                              "&": {
+                                  "scrollbar-color": "#9ca3af rgb(54, 59, 61)",
+                              },
+                          }
+                        : null}
+                />
             </Pane>
             <Pane>
-                <div class="section-header light">
+                <div
+                    class="section-header {isDarkModeEnabled
+                        ? 'dark'
+                        : 'light'}"
+                >
                     <span>MAPPING</span>
                 </div>
-                {#if isDarkModeEnabled}
-                    <CodeMirror
-                        bind:value={mappingState}
-                        lang={javascript()}
-                        lineWrapping={true}
-                        extensions={[scrollPastEnd()]}
-                        theme={oneDark}
-                        styles={{
-                            "&": {
-                                "scrollbar-color": "#9ca3af rgb(54, 59, 61)",
-                            },
-                        }}
-                    />
-                {:else}
-                    <CodeMirror
-                        bind:value={mappingState}
-                        lang={javascript()}
-                        lineWrapping={true}
-                        extensions={[scrollPastEnd()]}
-                    />
-                {/if}
+                <CodeMirror
+                    bind:value={mappingState}
+                    lang={javascript()}
+                    lineWrapping={true}
+                    extensions={[scrollPastEnd()]}
+                    theme={isDarkModeEnabled ? oneDark : null}
+                    styles={isDarkModeEnabled
+                        ? {
+                              "&": {
+                                  "scrollbar-color": "#9ca3af rgb(54, 59, 61)",
+                              },
+                          }
+                        : null}
+                />
             </Pane>
             <Pane>
-                <div class="section-header light">
+                <div
+                    class="section-header {isDarkModeEnabled
+                        ? 'dark'
+                        : 'light'}"
+                >
                     <span>TARGET</span>
                 </div>
-                {#if isDarkModeEnabled}
-                    {#await targetState then target}
-                        <CodeMirror
-                            editable={false}
-                            lang={json()}
-                            lineWrapping={true}
-                            extensions={[scrollPastEnd()]}
-                            value={target}
-                            theme={oneDark}
-                            styles={{
-                                "&": {
-                                    "scrollbar-color":
-                                        "#9ca3af rgb(54, 59, 61)",
-                                },
-                            }}
-                        />
-                    {:catch error}
-                        <p>{error.message}</p>
-                    {/await}
-                {:else}
-                    {#await targetState then target}
-                        <CodeMirror
-                            editable={false}
-                            lang={json()}
-                            lineWrapping={true}
-                            extensions={[scrollPastEnd()]}
-                            value={target}
-                        />
-                    {:catch error}
-                        <p>{error.message}</p>
-                    {/await}
-                {/if}
+                {#await targetState then target}
+                    <CodeMirror
+                        editable={false}
+                        lang={json()}
+                        lineWrapping={true}
+                        extensions={[scrollPastEnd()]}
+                        value={target}
+                        theme={isDarkModeEnabled ? oneDark : null}
+                        styles={isDarkModeEnabled
+                            ? {
+                                  "&": {
+                                      "scrollbar-color":
+                                          "#9ca3af rgb(54, 59, 61)",
+                                  },
+                              }
+                            : null}
+                    />
+                {:catch error}
+                    <p>{error.message}</p>
+                {/await}
             </Pane>
         </Splitpanes>
     </main>

@@ -187,7 +187,7 @@
         color: var(--gray0);
         font-size: 14px;
         font-weight: 600;
-        left: 77%;
+        left: 73%;
         margin-left: -35px;
         opacity: 0;
         padding: 6px 0;
@@ -195,7 +195,7 @@
         text-align: center;
         transition: opacity 0.3s;
         visibility: hidden;
-        width: 100px;
+        width: 110px;
         z-index: 1;
     }
     span.tooltip-text::after {

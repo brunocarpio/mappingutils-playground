@@ -1,0 +1,16 @@
+#main-container {
+  display: flex;
+  height: calc(100% - 40px);
+  width: 100%;
+}
+
+#main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.pane.left, .pane.center {
+  border-right: 1px solid;
+}

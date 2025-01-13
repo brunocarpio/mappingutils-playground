@@ -1,5 +1,5 @@
 import { invoiceSample, itemSample } from "./samples.mjs";
-import { appendMappingLi } from "./modules/mappingLi.mjs";
+import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
 
 let darkMode = true;
 
@@ -30,13 +30,14 @@ buttonDarkMode?.addEventListener("click", () => {
 
 addMapping?.addEventListener("click", () => {
   let id = crypto.randomUUID();
-  mappingList.unshift({
+  let mapping = {
     id,
     mapping: "",
     source: "",
     text: "",
-  });
-  console.log(mappingList);
+  };
+  mappingList.unshift(mapping);
+  unshiftMappingLi(mapping.id, mappingUl, mapping.text);
 });
 
 function switchDarkMode() {
@@ -63,8 +64,6 @@ function listMappings() {
   if (mappingUl) {
     for (let i = 0; i < mappingList.length; i++) {
       let mapping = mappingList[i];
-      if (document.getElementById(mapping.id)) {
-      }
       appendMappingLi(mapping.id, mappingUl, i === 0, mapping.text);
     }
   }

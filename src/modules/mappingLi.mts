@@ -1,51 +1,19 @@
 export function appendMappingLi(id: string, parent: HTMLElement, isActive: boolean, value: string) {
-  let template = document.querySelector<HTMLTemplateElement>("#mappingli-template");
-  if (template) {
-    let clone = template.content.cloneNode(true) as HTMLElement;
-    let li = clone.querySelector<HTMLLIElement>("li.mapping-li");
-    if (li) {
-      li.id = id;
-      if (isActive) li.classList.add("active");
-    }
-    let input = clone.querySelector("input");
-    if (input) {
-      input.value = value;
-    }
-    let menuPopover = clone.querySelector<HTMLUListElement>("ul.menu");
-    let renameButton = clone.querySelector("#button-rename");
-    let deleteButton = clone.querySelector("button.button-delete");
-    renameButton?.addEventListener("click", () => {
-      menuPopover?.hidePopover();
-      if (input) {
-        input.type = "text";
-        input.setSelectionRange(
-          input.value.length,
-          input.value.length,
-        );
-        input.focus({ focusVisible: true });
-      }
-    });
-    input?.addEventListener("keydown", (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        if (input.value === "") {
-          input.value = "New Mapping";
-        }
-        input.blur();
-      }
-    });
-    input?.addEventListener("focusout", () => {
-      input.type = "button";
-    });
-    deleteButton?.addEventListener("click", () => {
-      parent.removeChild(li!);
-      let liElements = parent.getElementsByClassName("mapping-li");
-      for (let li of liElements) {
-        computeMenuLocation(li.id);
-      }
-    });
-    parent.appendChild(clone);
-    computeMenuLocation(id);
+  let clone = makeMappingLi(id, parent, isActive, value);
+  parent.appendChild(clone);
+  computeMenuLocation(id);
+}
+
+export function unshiftMappingLi(id: string, parent: HTMLElement, value: string) {
+  let clone = makeMappingLi(id, parent, true, value);
+  let children = parent.querySelectorAll("#mappings .mapping-li");
+  for (let i = 0; i < children.length; i++) {
+    let li = children[i];
+    li.classList.remove("active");
   }
+  parent.replaceChildren(clone, ...children);
+  computeAllMenus();
+  renameLi(parent.firstElementChildfirstChild);
 }
 
 function computeMenuLocation(id: string) {
@@ -59,5 +27,63 @@ function computeMenuLocation(id: string) {
       menuPopover.style.top = (rect.bottom - 10) + "px";
       menuPopover.style.left = (rect.right - 25) + "px";
     }
+  }
+}
+
+function computeAllMenus() {
+  let liElements = document.getElementsByClassName("mapping-li");
+  for (let li of liElements) {
+    computeMenuLocation(li.id);
+  }
+}
+
+function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value: string) {
+  let template = document.querySelector<HTMLTemplateElement>("#mappingli-template");
+  let clone = template?.content.cloneNode(true) as HTMLElement;
+  let li = clone.querySelector<HTMLLIElement>("li.mapping-li");
+  if (li) {
+    li.id = id;
+    if (isActive) li.classList.add("active");
+  }
+  let input = clone.querySelector("input");
+  if (input) {
+    input.value = value;
+  }
+  let menuPopover = clone.querySelector<HTMLUListElement>("ul.menu");
+  let renameButton = clone.querySelector("#button-rename");
+  let deleteButton = clone.querySelector("button.button-delete");
+  renameButton?.addEventListener("click", () => {
+    menuPopover?.hidePopover();
+    if (input) {
+      renameLi(li!);
+    }
+  });
+  input?.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      if (input.value === "") {
+        input.value = "New Mapping";
+      }
+      input.blur();
+    }
+  });
+  input?.addEventListener("focusout", () => {
+    input.type = "button";
+  });
+  deleteButton?.addEventListener("click", () => {
+    parent.removeChild(li!);
+    computeAllMenus();
+  });
+  return clone;
+}
+
+function renameLi(li: HTMLElement) {
+  let input = li.querySelector("input");
+  if (input) {
+    input.type = "text";
+    input.setSelectionRange(
+      input.value.length,
+      input.value.length,
+    );
+    input.focus({ focusVisible: true });
   }
 }

@@ -13,7 +13,7 @@ export function unshiftMappingLi(id: string, parent: HTMLElement, value: string)
   }
   parent.replaceChildren(clone, ...children);
   computeAllMenus();
-  renameLi(parent.firstElementChildfirstChild);
+  renameLi(parent.children.item(0) as HTMLElement);
 }
 
 function computeMenuLocation(id: string) {
@@ -37,7 +37,7 @@ function computeAllMenus() {
   }
 }
 
-function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value: string) {
+function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value: string): HTMLElement {
   let template = document.querySelector<HTMLTemplateElement>("#mappingli-template");
   let clone = template?.content.cloneNode(true) as HTMLElement;
   let li = clone.querySelector<HTMLLIElement>("li.mapping-li");

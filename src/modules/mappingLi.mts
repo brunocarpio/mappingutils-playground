@@ -1,3 +1,8 @@
+import { mappingList } from "../main.mts";
+import { updateCenterEditorContent, updateLeftEditorContent } from "./editor.mts";
+
+let selected;
+
 export function appendMappingLi(id: string, parent: HTMLElement, isActive: boolean, value: string) {
   let clone = makeMappingLi(id, parent, isActive, value);
   parent.appendChild(clone);
@@ -58,6 +63,17 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
       renameLi(li!);
     }
   });
+  input?.addEventListener("click", (e: MouseEvent) => {
+    e.preventDefault();
+    console.log("CLICKED");
+    selected = mappingList.find((mapping) => mapping.id === id);
+    console.log("selected", selected);
+    updateLeftEditorContent(selected?.source);
+    updateCenterEditorContent(selected?.mapping);
+  });
+  input?.addEventListener("focusout", () => {
+    input.type = "button";
+  });
   input?.addEventListener("keydown", (e: KeyboardEvent) => {
     if (e.key === "Enter") {
       if (input.value === "") {
@@ -65,9 +81,6 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
       }
       input.blur();
     }
-  });
-  input?.addEventListener("focusout", () => {
-    input.type = "button";
   });
   deleteButton?.addEventListener("click", () => {
     parent.removeChild(li!);

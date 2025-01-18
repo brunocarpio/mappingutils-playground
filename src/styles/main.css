@@ -1,14 +1,18 @@
 #main-container {
   display: flex;
-  height: calc(100% - 40px);
+  height: calc(100dvh - 40px);
   width: 100%;
 }
 
 #main {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, calc(100% / 3));
   height: 100%;
   width: 100%;
+}
+
+#main .pane {
+  height: calc(100dvh - 40px);
 }
 
 .pane.left, .pane.center {

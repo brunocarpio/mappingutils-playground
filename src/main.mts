@@ -1,5 +1,6 @@
 import { invoiceSample, itemSample } from "./samples.mjs";
 import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
+import { makeEditorViews, setEditorTheme } from "./modules/editor.mts";
 
 let darkMode = true;
 
@@ -8,15 +9,15 @@ let buttonDarkMode = document.querySelector<HTMLButtonElement>("#button-dark-mod
 let mappingUl = document.getElementById("mappings") as HTMLUListElement;
 let addMapping = document.getElementById("add-mapping-button") as HTMLButtonElement;
 
-let mappingList = [
+export let mappingList = [
   {
-    id: crypto.randomUUID(),
+    id: "56c91a03-95a7-4928-9a4d-85486b1f3ec1",
     text: "Item",
     source: itemSample.source,
     mapping: itemSample.mapping,
   },
   {
-    id: crypto.randomUUID(),
+    id: "eb631d1c-170f-4aec-a368-2ac7a0b0516b",
     text: "Invoice",
     source: invoiceSample.source,
     mapping: invoiceSample.mapping,
@@ -26,9 +27,11 @@ let mappingList = [
 buttonDarkMode?.addEventListener("click", () => {
   darkMode = !darkMode;
   switchDarkMode();
+  setEditorTheme(darkMode);
 });
 
-addMapping?.addEventListener("click", () => {
+addMapping?.addEventListener("click", (e: MouseEvent) => {
+  e.stopImmediatePropagation();
   let id = crypto.randomUUID();
   let mapping = {
     id,
@@ -69,5 +72,8 @@ function listMappings() {
   }
 }
 
-listMappings();
+window.onload = (_) => {
+  listMappings();
+  makeEditorViews();
+}
 

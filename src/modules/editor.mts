@@ -48,15 +48,19 @@ export function makeEditorViews() {
 }
 
 export function setEditorTheme(darkMode: boolean) {
+  let transaction;
   if (darkMode) {
-    leftEditorView.dispatch({
+    transaction = {
       effects: themeCompartment.reconfigure(darkTheme)
-    });
+    }
   } else {
-    leftEditorView.dispatch({
+    transaction = {
       effects: themeCompartment.reconfigure(lightTheme)
-    });
+    }
   }
+  leftEditorView.dispatch(transaction);
+  centerEditorView.dispatch(transaction);
+  rightEditorView.dispatch(transaction);
 }
 
 function updateEditorContent(editorView: EditorView, content: string) {

@@ -1,10 +1,11 @@
 import { EditorView, basicSetup } from "codemirror";
-import { Compartment, EditorState } from "@codemirror/state";
+import { Compartment, EditorState, Extension } from "@codemirror/state";
 import { json } from "@codemirror/lang-json";
 import { javascript } from "@codemirror/lang-javascript";
-import { scrollPastEnd } from "@codemirror/view";
+import { scrollPastEnd, ViewUpdate } from "@codemirror/view";
 import { githubLight } from "@ddietr/codemirror-themes/theme/github-light";
 import { githubDark } from "@ddietr/codemirror-themes/theme/github-dark";
+import ScriptEvaluator from "./ScriptEvaluator.mts";
 
 let leftPane = document.querySelector(".pane.left")!;
 let centerPane = document.querySelector(".pane.center")!;
@@ -14,9 +15,12 @@ let leftEditorView: EditorView;
 let centerEditorView: EditorView;
 let rightEditorView: EditorView;
 
-let lightTheme = githubLight;
-let darkTheme = githubDark;
-let themeCompartment = new Compartment;
+let lightTheme: Extension = githubLight;
+let darkTheme: Extension = githubDark;
+let theme: Compartment = new Compartment;
+
+let evaluator = new ScriptEvaluator();
+let currentMapping;
 
 function createEditorState(readOnly: boolean, lang: string) {
   let langExtension;
@@ -27,7 +31,13 @@ function createEditorState(readOnly: boolean, lang: string) {
     langExtension = javascript();
   }
   let extensions = [
-    basicSetup, langExtension, scrollPastEnd(), fixedHeightEditor(), EditorView.lineWrapping, themeCompartment.of(darkTheme)
+    basicSetup,
+    langExtension,
+    scrollPastEnd(),
+    fixedHeightEditorExtension(),
+    updateListenerExtension(),
+    EditorView.lineWrapping,
+    theme.of(darkTheme)
   ];
   if (readOnly) {
     extensions.push(EditorState.readOnly.of(true));
@@ -43,10 +53,19 @@ function makeEditorView(parent: Element, readOnly: boolean, lang: string) {
   });
 }
 
-function fixedHeightEditor() {
+function fixedHeightEditorExtension() {
   return EditorView.theme({
     "&": { height: "100%" },
     ".cm-scroller": { overflow: "auto" }
+  });
+}
+
+function updateListenerExtension() {
+  return EditorView.updateListener.of((update: ViewUpdate) => {
+    if (update.docChanged) {
+      //console.log(update.view === leftEditorView);
+      //console.log(update.view.state.doc.toString());
+    }
   });
 }
 
@@ -58,7 +77,7 @@ export function makeEditorViews() {
 
 export function setEditorTheme(darkMode: boolean) {
   let transaction = {
-    effects: themeCompartment.reconfigure(darkMode ? darkTheme : lightTheme)
+    effects: theme.reconfigure(darkMode ? darkTheme : lightTheme)
   };
   leftEditorView.dispatch(transaction);
   centerEditorView.dispatch(transaction);
@@ -75,12 +94,23 @@ function overwriteEditorContent(editorView: EditorView, content: string) {
   });
 }
 
-export function overwriteLeftEditorContent(content: string) {
-  overwriteEditorContent(leftEditorView, content);
+export async function setEditorContent(mapping: any) {
+  currentMapping = mapping;
+  overwriteEditorContent(leftEditorView, mapping.source);
+  overwriteEditorContent(centerEditorView, mapping.mapping);
+  let computed = await computeMapping(mapping.source, mapping.mapping)
+  overwriteEditorContent(rightEditorView, computed);
 }
-export function overwriteCenterEditorContent(content: string) {
-  overwriteEditorContent(centerEditorView, content);
+
+async function computeMapping(source: string, mapping: string): Promise<string> {
+  try {
+    return JSON.stringify(
+      await evaluator.evalAsync({ source, mapping }),
+      null,
+      2
+    );
+  } catch (err: any) {
+    return err.toString();
+  }
 }
-export function overwriteRightEditorContent(content: string) {
-  overwriteEditorContent(rightEditorView, content);
-}
+

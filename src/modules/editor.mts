@@ -1,6 +1,7 @@
 import { EditorView, basicSetup } from "codemirror";
 import { Compartment, EditorState } from "@codemirror/state";
 import { json } from "@codemirror/lang-json";
+import { javascript } from "@codemirror/lang-javascript";
 import { scrollPastEnd } from "@codemirror/view";
 import { githubLight } from "@ddietr/codemirror-themes/theme/github-light";
 import { githubDark } from "@ddietr/codemirror-themes/theme/github-dark";
@@ -17,17 +18,23 @@ let lightTheme = githubLight;
 let darkTheme = githubDark;
 let themeCompartment = new Compartment;
 
-let state = EditorState.create({
-  extensions: [
-    basicSetup,
-    json(),
-    scrollPastEnd(),
-    fixedHeightEditor(),
-    themeCompartment.of(darkTheme)
-  ],
-});
+function createEditorState(readOnly: boolean, lang: string) {
+  let langExtension;
+  if (lang === "json") {
+    langExtension = json();
+  }
+  if (lang === "javascript") {
+    langExtension = javascript();
+  }
+  let extensions = [basicSetup, langExtension, scrollPastEnd(), fixedHeightEditor(), themeCompartment.of(darkTheme)];
+  if (readOnly) {
+    extensions.push(EditorState.readOnly.of(true));
+  }
+  return EditorState.create({ extensions });
+}
 
-function makeEditorView(parent: Element) {
+function makeEditorView(parent: Element, readOnly: boolean, lang: string) {
+  let state = createEditorState(readOnly, lang);
   return new EditorView({
     state,
     parent
@@ -42,28 +49,21 @@ function fixedHeightEditor() {
 }
 
 export function makeEditorViews() {
-  leftEditorView = makeEditorView(leftPane);
-  centerEditorView = makeEditorView(centerPane);
-  rightEditorView = makeEditorView(rightPane);
+  leftEditorView = makeEditorView(leftPane, false, "json");
+  centerEditorView = makeEditorView(centerPane, false, "javascript");
+  rightEditorView = makeEditorView(rightPane, true, "json");
 }
 
 export function setEditorTheme(darkMode: boolean) {
-  let transaction;
-  if (darkMode) {
-    transaction = {
-      effects: themeCompartment.reconfigure(darkTheme)
-    }
-  } else {
-    transaction = {
-      effects: themeCompartment.reconfigure(lightTheme)
-    }
-  }
+  let transaction = {
+    effects: themeCompartment.reconfigure(darkMode ? darkTheme : lightTheme)
+  };
   leftEditorView.dispatch(transaction);
   centerEditorView.dispatch(transaction);
   rightEditorView.dispatch(transaction);
 }
 
-function updateEditorContent(editorView: EditorView, content: string) {
+function overwriteEditorContent(editorView: EditorView, content: string) {
   editorView?.dispatch({
     changes: {
       from: 0,
@@ -73,12 +73,12 @@ function updateEditorContent(editorView: EditorView, content: string) {
   });
 }
 
-export function updateLeftEditorContent(content: string) {
-  updateEditorContent(leftEditorView, content);
+export function overwriteLeftEditorContent(content: string) {
+  overwriteEditorContent(leftEditorView, content);
 }
-export function updateCenterEditorContent(content: string) {
-  updateEditorContent(centerEditorView, content);
+export function overwriteCenterEditorContent(content: string) {
+  overwriteEditorContent(centerEditorView, content);
 }
-export function updateRightEditorContent(content: string) {
-  updateEditorContent(rightEditorView, content);
+export function overwriteRightEditorContent(content: string) {
+  overwriteEditorContent(rightEditorView, content);
 }

@@ -1,7 +1,23 @@
 import { mappingList } from "../main.mts";
-import { updateCenterEditorContent, updateLeftEditorContent } from "./editor.mts";
+import { overwriteCenterEditorContent, overwriteLeftEditorContent, overwriteRightEditorContent } from "./editor.mts";
+import ScriptEvaluator from "./ScriptEvaluator.mts";
 
 let selected;
+let evaluator = new ScriptEvaluator();
+
+async function computeMapping(source: string, mapping: string): Promise<string> {
+  console.log("evaluator", evaluator);
+  try {
+    console.log("IN COMPUTE");
+    return JSON.stringify(
+      await evaluator.evalAsync({ source, mapping }),
+      null,
+      2
+    );
+  } catch (err: any) {
+    return err.toString();
+  }
+}
 
 export function appendMappingLi(id: string, parent: HTMLElement, isActive: boolean, value: string) {
   let clone = makeMappingLi(id, parent, isActive, value);
@@ -63,13 +79,15 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
       renameLi(li!);
     }
   });
-  input?.addEventListener("click", (e: MouseEvent) => {
+  input?.addEventListener("click", async (e: MouseEvent) => {
     e.preventDefault();
     console.log("CLICKED");
     selected = mappingList.find((mapping) => mapping.id === id);
     console.log("selected", selected);
-    updateLeftEditorContent(selected?.source);
-    updateCenterEditorContent(selected?.mapping);
+    overwriteLeftEditorContent(selected?.source);
+    overwriteCenterEditorContent(selected?.mapping);
+    let computed = await computeMapping(selected?.source, selected?.mapping)
+    overwriteRightEditorContent(computed);
   });
   input?.addEventListener("focusout", () => {
     input.type = "button";

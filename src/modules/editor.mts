@@ -26,7 +26,9 @@ function createEditorState(readOnly: boolean, lang: string) {
   if (lang === "javascript") {
     langExtension = javascript();
   }
-  let extensions = [basicSetup, langExtension, scrollPastEnd(), fixedHeightEditor(), themeCompartment.of(darkTheme)];
+  let extensions = [
+    basicSetup, langExtension, scrollPastEnd(), fixedHeightEditor(), EditorView.lineWrapping, themeCompartment.of(darkTheme)
+  ];
   if (readOnly) {
     extensions.push(EditorState.readOnly.of(true));
   }

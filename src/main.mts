@@ -9,7 +9,14 @@ let buttonDarkMode = document.querySelector<HTMLButtonElement>("#button-dark-mod
 let mappingUl = document.getElementById("mappings") as HTMLUListElement;
 let addMapping = document.getElementById("add-mapping-button") as HTMLButtonElement;
 
-export let mappingList = [
+export interface Mapping {
+  id: string;
+  text: string;
+  source: string;
+  mapping: string;
+}
+
+export let mappingList: Mapping[] = [
   {
     id: "56c91a03-95a7-4928-9a4d-85486b1f3ec1",
     text: "Item",

@@ -39,7 +39,6 @@ export default class ScriptEvaluator {
           clearTimeout(handle);
           reject((e as any).message);
         };
-        console.log("worker", worker);
       });
     } else {
       return new Promise((resolve, _) => {

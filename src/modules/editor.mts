@@ -58,7 +58,7 @@ function makeEditorView(parent: Element, readOnly: boolean, lang: string) {
 
 function fixedHeightEditorExtension() {
   return EditorView.theme({
-    "&": { height: "100%" },
+    "&": { height: "calc(100% - 30px)" },
     ".cm-scroller": { overflow: "auto" }
   });
 }

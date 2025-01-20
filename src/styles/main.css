@@ -15,6 +15,22 @@
   height: calc(100dvh - 40px);
 }
 
-.pane.left, .pane.center {
+.pane.left,
+.pane.center {
   border-right: 1px solid;
+}
+
+#main .section-header {
+  background-color: var(--bg);
+  color: var(--text);
+  height: 30px;
+  padding-left: 20px;
+  position: relative;
+}
+
+#main .section-header span {
+  font-family: var(--font-mono);
+  font-weight: bold;
+  position: absolute;
+  top: 4px;
 }

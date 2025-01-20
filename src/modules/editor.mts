@@ -20,6 +20,10 @@ let lightTheme: Extension = githubLight;
 let darkTheme: Extension = githubDark;
 let theme: Compartment = new Compartment;
 
+let scrollBar: Compartment = new Compartment;
+let lightScrollBar = customScrollbar(false);
+let darkScrollBar = customScrollbar(true);
+
 let evaluator = new ScriptEvaluator();
 let currentMapping: Mapping;
 
@@ -40,7 +44,8 @@ function createEditorState(readOnly: boolean, lang: string) {
     fixedHeightEditorExtension(),
     updateListenerExtension(),
     EditorView.lineWrapping,
-    theme.of(darkTheme)
+    theme.of(darkTheme),
+    scrollBar.of(darkScrollBar)
   ];
   if (readOnly) {
     extensions.push(EditorState.readOnly.of(true));
@@ -58,9 +63,30 @@ function makeEditorView(parent: Element, readOnly: boolean, lang: string) {
 
 function fixedHeightEditorExtension() {
   return EditorView.theme({
-    "&": { height: "calc(100% - 30px)" },
-    ".cm-scroller": { overflow: "auto" }
+    "&": {
+      "height": "calc(100% - 30px)",
+    },
+    ".cm-scroller": {
+      "overflow": "auto",
+      "scrollbar-width": "thin"
+    }
   });
+}
+
+function customScrollbar(darkMode: boolean) {
+  if (darkMode) {
+    return EditorView.theme({
+      ".cm-scroller": {
+        "scrollbar-color": "var(--gray5) var(--gray7)",
+      },
+    });
+  } else {
+    return EditorView.theme({
+      ".cm-scroller": {
+        "scrollbar-color": "var(--gray3) var(--gray1)",
+      },
+    });
+  }
 }
 
 function updateListenerExtension() {
@@ -89,7 +115,10 @@ export function makeEditorViews() {
 
 export function setEditorTheme(darkMode: boolean) {
   let transaction = {
-    effects: theme.reconfigure(darkMode ? darkTheme : lightTheme)
+    effects: [
+      theme.reconfigure(darkMode ? darkTheme : lightTheme),
+      scrollBar.reconfigure(darkMode ? darkScrollBar : lightScrollBar)
+    ]
   };
   leftEditorView.dispatch(transaction);
   centerEditorView.dispatch(transaction);

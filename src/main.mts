@@ -1,6 +1,6 @@
 import { invoiceSample, itemSample } from "./samples.mjs";
 import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
-import { makeEditorViews, setEditorTheme } from "./modules/editor.mts";
+import { makeEditorViews, setEditorContent, setEditorTheme } from "./modules/editor.mts";
 
 let darkMode = true;
 
@@ -48,6 +48,7 @@ addMapping?.addEventListener("click", (e: MouseEvent) => {
   };
   mappingList.unshift(mapping);
   unshiftMappingLi(mapping.id, mappingUl, mapping.text);
+  setEditorContent(mapping);
 });
 
 function switchDarkMode() {

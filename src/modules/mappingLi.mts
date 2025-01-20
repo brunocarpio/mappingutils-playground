@@ -70,8 +70,8 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
     selected = mappingList.find((mapping) => mapping.id === id);
     console.log("SELECTED", selected);
     setEditorContent(selected);
-    let children = document.querySelectorAll("#mappings .mapping-li");
     let clickedInput = e.target as HTMLInputElement;
+    let children = document.querySelectorAll("#mappings .mapping-li");
     for (let i = 0; i < children.length; i++) {
       let li = children[i];
       if (li.id === clickedInput.dataset.id) {

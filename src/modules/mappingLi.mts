@@ -53,6 +53,7 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
   let input = clone.querySelector("input");
   if (input) {
     input.value = value;
+    input.dataset.id = id;
   }
   let menuPopover = clone.querySelector<HTMLUListElement>("ul.menu");
   let renameButton = clone.querySelector("#button-rename");
@@ -65,10 +66,20 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
   });
   input?.addEventListener("click", async (e: MouseEvent) => {
     e.preventDefault();
-    console.log("CLICKED");
+    console.log("INPUT CLICKED");
     selected = mappingList.find((mapping) => mapping.id === id);
-    console.log("selected", selected);
+    console.log("SELECTED", selected);
     setEditorContent(selected);
+    let children = document.querySelectorAll("#mappings .mapping-li");
+    let clickedInput = e.target as HTMLInputElement;
+    for (let i = 0; i < children.length; i++) {
+      let li = children[i];
+      if (li.id === clickedInput.dataset.id) {
+        li.classList.add("active");
+      } else {
+        li.classList.remove("active");
+      }
+    }
   });
   input?.addEventListener("focusout", () => {
     input.type = "button";

@@ -83,5 +83,8 @@ function listMappings() {
 window.onload = (_) => {
   listMappings();
   makeEditorViews();
+  if (mappingList[0]) {
+    setEditorContent(mappingList[0]);
+  }
 }
 

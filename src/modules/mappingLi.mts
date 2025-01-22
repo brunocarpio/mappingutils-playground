@@ -1,7 +1,8 @@
-import { mappingList } from "../main.mts";
+import { type Mapping } from "../main.mts";
 import { setEditorContent } from "./editor.mts";
+import { deleteMappingLocal, getMappingLocal, upsertMappingLocal } from "./localStorage.mts";
 
-let selected;
+let renamed: Mapping | null = null;
 
 export function appendMappingLi(id: string, parent: HTMLElement, isActive: boolean, value: string) {
   let clone = makeMappingLi(id, parent, isActive, value);
@@ -19,6 +20,7 @@ export function unshiftMappingLi(id: string, parent: HTMLElement, value: string)
   parent.replaceChildren(clone, ...children);
   computeAllMenus();
   renameLi(parent.children.item(0) as HTMLElement);
+  renamed = getMappingLocal(id);
 }
 
 function computeMenuLocation(id: string) {
@@ -56,20 +58,29 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
     input.dataset.id = id;
   }
   let menuPopover = clone.querySelector<HTMLUListElement>("ul.menu");
-  let renameButton = clone.querySelector("#button-rename");
-  let deleteButton = clone.querySelector("button.button-delete");
-  renameButton?.addEventListener("click", () => {
-    menuPopover?.hidePopover();
-    if (input) {
-      renameLi(li!);
-    }
-  });
+  let renameButton = clone.querySelector<HTMLButtonElement>("#button-rename");
+  let deleteButton = clone.querySelector<HTMLButtonElement>("button.button-delete");
+  if (renameButton) {
+    renameButton.dataset.id = id;
+    renameButton.addEventListener("click", (e: MouseEvent) => {
+      let clicked = (e.target as HTMLInputElement).dataset.id;
+      if (clicked) {
+        renamed = getMappingLocal(clicked);
+      }
+      menuPopover?.hidePopover();
+      if (input) {
+        renameLi(li!);
+      }
+    });
+  }
+  // select mapping li and load it
   input?.addEventListener("click", async (e: MouseEvent) => {
     e.preventDefault();
-    console.log("INPUT CLICKED");
-    selected = mappingList.find((mapping) => mapping.id === id);
-    console.log("SELECTED", selected);
-    setEditorContent(selected);
+    let selected = getMappingLocal(id);
+    if (selected) {
+      renamed = selected;
+      setEditorContent(selected);
+    }
     let clickedInput = e.target as HTMLInputElement;
     let children = document.querySelectorAll("#mappings .mapping-li");
     for (let i = 0; i < children.length; i++) {
@@ -83,6 +94,10 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
   });
   input?.addEventListener("focusout", () => {
     input.type = "button";
+    if (renamed) {
+      renamed.text = input.value;
+      upsertMappingLocal(renamed);
+    }
   });
   input?.addEventListener("keydown", (e: KeyboardEvent) => {
     if (e.key === "Enter") {
@@ -90,11 +105,16 @@ function makeMappingLi(id: string, parent: HTMLElement, isActive: boolean, value
         input.value = "New Mapping";
       }
       input.blur();
+      if (renamed) {
+        renamed.text = input.value;
+        upsertMappingLocal(renamed);
+      }
     }
   });
   deleteButton?.addEventListener("click", () => {
     parent.removeChild(li!);
     computeAllMenus();
+    deleteMappingLocal(id);
   });
   return clone;
 }

@@ -1,6 +1,7 @@
 import { invoiceSample, itemSample } from "./samples.mjs";
 import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
 import { makeEditorViews, setEditorContent, setEditorTheme } from "./modules/editor.mts";
+import { getAllMappingsLocal, initializeLocal, upsertMappingLocal } from "./modules/localStorage.mts";
 
 let darkMode = true;
 
@@ -16,7 +17,7 @@ export interface Mapping {
   mapping: string;
 }
 
-export let mappingList: Mapping[] = [
+export let initialMappingList: Mapping[] = [
   {
     id: "56c91a03-95a7-4928-9a4d-85486b1f3ec1",
     text: "Item",
@@ -46,7 +47,7 @@ addMapping?.addEventListener("click", (e: MouseEvent) => {
     source: "",
     text: "",
   };
-  mappingList.unshift(mapping);
+  upsertMappingLocal(mapping);
   unshiftMappingLi(mapping.id, mappingUl, mapping.text);
   setEditorContent(mapping);
 });
@@ -73,18 +74,23 @@ function switchDarkMode() {
 
 function listMappings() {
   if (mappingUl) {
-    for (let i = 0; i < mappingList.length; i++) {
-      let mapping = mappingList[i];
-      appendMappingLi(mapping.id, mappingUl, i === 0, mapping.text);
+    let list = getAllMappingsLocal();
+    if (list) {
+      for (let i = 0; i < list.length; i++) {
+        let mapping = list[i];
+        appendMappingLi(mapping.id, mappingUl, i === 0, mapping.text);
+      }
     }
   }
 }
 
 window.onload = (_) => {
+  initializeLocal();
   listMappings();
   makeEditorViews();
-  if (mappingList[0]) {
-    setEditorContent(mappingList[0]);
+  let list = getAllMappingsLocal();
+  if (list && list[0]) {
+    setEditorContent(list[0]);
   }
 }
 

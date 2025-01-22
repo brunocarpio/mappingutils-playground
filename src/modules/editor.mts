@@ -6,7 +6,8 @@ import { scrollPastEnd, ViewUpdate } from "@codemirror/view";
 import { githubLight } from "@ddietr/codemirror-themes/theme/github-light";
 import { githubDark } from "@ddietr/codemirror-themes/theme/github-dark";
 import ScriptEvaluator from "./ScriptEvaluator.mts";
-import { Mapping } from "../main.mts";
+import { type Mapping } from "../main.mts";
+import { upsertMappingLocal } from "./localStorage.mts";
 
 let leftPane = document.querySelector(".pane.left")!;
 let centerPane = document.querySelector(".pane.center")!;
@@ -27,7 +28,7 @@ let darkScrollBar = customScrollbar(true);
 let evaluator = new ScriptEvaluator();
 let currentMapping: Mapping;
 
-let overwrite = false;
+let inOverwrite = false;
 
 function createEditorState(readOnly: boolean, lang: string) {
   let langExtension;
@@ -91,15 +92,15 @@ function customScrollbar(darkMode: boolean) {
 
 function updateListenerExtension() {
   return EditorView.updateListener.of(async (update: ViewUpdate) => {
-    if (update.docChanged && !overwrite) {
+    if (update.docChanged && !inOverwrite) {
       if (update.view === leftEditorView) {
-        console.log("on change left", Date.now());
         currentMapping.source = update.view.state.doc.toString();
+        upsertMappingLocal(currentMapping);
         let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
         overwriteEditorContent(rightEditorView, computed);
       } else if (update.view === centerEditorView) {
-        console.log("on change center", Date.now());
         currentMapping.mapping = update.view.state.doc.toString();
+        upsertMappingLocal(currentMapping);
         let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
         overwriteEditorContent(rightEditorView, computed);
       }
@@ -126,7 +127,7 @@ export function setEditorTheme(darkMode: boolean) {
 }
 
 function overwriteEditorContent(editorView: EditorView, content: string) {
-  overwrite = true;
+  inOverwrite = true;
   editorView?.dispatch({
     changes: {
       from: 0,
@@ -134,10 +135,10 @@ function overwriteEditorContent(editorView: EditorView, content: string) {
       insert: content
     }
   });
-  overwrite = false;
+  inOverwrite = false;
 }
 
-export async function setEditorContent(mapping: any) {
+export async function setEditorContent(mapping: Mapping) {
   currentMapping = mapping;
   overwriteEditorContent(leftEditorView, mapping.source);
   overwriteEditorContent(centerEditorView, mapping.mapping);

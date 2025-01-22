@@ -1,4 +1,4 @@
-import { invoiceSample, itemSample } from "./samples.mjs";
+import { invoiceSample, itemSample } from "./samples.mts";
 import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
 import { makeEditorViews, setEditorContent, setEditorTheme } from "./modules/editor.mts";
 import { getAllMappingsLocal, initializeLocal, upsertMappingLocal } from "./modules/localStorage.mts";

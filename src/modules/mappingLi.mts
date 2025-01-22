@@ -127,6 +127,6 @@ function renameLi(li: HTMLElement) {
       input.value.length,
       input.value.length,
     );
-    input.focus({ focusVisible: true });
+    input.focus();
   }
 }

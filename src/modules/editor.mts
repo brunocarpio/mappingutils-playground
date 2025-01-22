@@ -34,11 +34,10 @@ function createEditorState(readOnly: boolean, lang: string) {
   let langExtension;
   if (lang === "json") {
     langExtension = json();
-  }
-  if (lang === "javascript") {
+  } else {
     langExtension = javascript();
   }
-  let extensions = [
+  let extensions: Extension[] = [
     basicSetup,
     langExtension,
     scrollPastEnd(),

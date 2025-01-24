@@ -1,3 +1,8 @@
+import "./styles/aside.css"
+import "./styles/base.css"
+import "./styles/main.css"
+import "./styles/navbar.css"
+
 import { invoiceSample, itemSample } from "./samples.mts";
 import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
 import { makeEditorViews, setEditorContent, setEditorTheme } from "./modules/editor.mts";

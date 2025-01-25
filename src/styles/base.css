@@ -36,10 +36,10 @@ body {
 }
 
 .dark {
-    --bg: var(--gray9);
+    --bg: var(--gray8);
     --border: var(--gray7);
-    --btn-hover: var(--gray8);
+    --btn-hover: var(--gray7);
     --menu-border: var(--gray6);
-    --nav-bg: var(--gray11);
+    --nav-bg: var(--gray9);
     --text: var(--gray1);
 }

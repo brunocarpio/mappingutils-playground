@@ -30,7 +30,7 @@
   <div id="main-container">
     <aside id="aside">
       <div class="edit-container">
-        <button aria-label="Add New Mapping" class="tooltip tbottom" data-text="New mapping" id="add-mapping-button">
+        <button aria-label="Add New Mapping" class="tooltip tbottom svg-button" data-text="New mapping" id="add-mapping-button">
           <svg viewBox="0 0 24 24" width="25px" height="25px" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z">
@@ -45,7 +45,23 @@
     </aside>
     <main id="main">
       <div class="pane left">
-        <div class="section-header"><span>Source JSON</span></div>
+        <div class="section-header">
+          <span>Source JSON</span>
+          <button aria-label="Pretty print" class="tooltip tbottom svg-button" data-text="Pretty print" id="pretty-print-source">
+            <svg viewBox="0 0 22 22" width="20px" height="20px" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M14 19H16C17.1046 19 18 18.1046 18 17V14.5616C18 13.6438 18.6246 12.8439 19.5149 12.6213L21.0299 12.2425C21.2823 12.1794 21.2823 11.8206 21.0299 11.7575L19.5149 11.3787C18.6246 11.1561 18 10.3562 18 9.43845V5H14"
+                  stroke="#33363F" stroke-width="2"></path>
+                <path
+                  d="M10 5H8C6.89543 5 6 5.89543 6 7V9.43845C6 10.3562 5.37541 11.1561 4.48507 11.3787L2.97014 11.7575C2.71765 11.8206 2.71765 12.1794 2.97014 12.2425L4.48507 12.6213C5.37541 12.8439 6 13.6438 6 14.5616V19H10"
+                  stroke="#33363F" stroke-width="2"></path>
+              </g>
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="pane center">
         <div class="section-header"><span>Mapping Transformation</span></div>

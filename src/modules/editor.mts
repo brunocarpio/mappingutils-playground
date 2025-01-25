@@ -13,6 +13,8 @@ let leftPane = document.querySelector(".pane.left")!;
 let centerPane = document.querySelector(".pane.center")!;
 let rightPane = document.querySelector(".pane.right")!;
 
+let prettyPrintSourceButton = document.getElementById("pretty-print-source");
+
 let leftEditorView: EditorView;
 let centerEditorView: EditorView;
 let rightEditorView: EditorView;
@@ -157,3 +159,13 @@ async function computeMapping(source: string, mapping: string): Promise<string> 
   }
 }
 
+prettyPrintSourceButton?.addEventListener("click", () => {
+  console.log("pretty print");
+  leftEditorView?.dispatch({
+    changes: {
+      from: 0,
+      to: leftEditorView.state.doc.length,
+      insert: JSON.stringify(JSON.parse(currentMapping.source), null, 2)
+    }
+  });
+});

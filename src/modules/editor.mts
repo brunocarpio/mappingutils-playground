@@ -9,11 +9,13 @@ import ScriptEvaluator from "./ScriptEvaluator.mts";
 import { type Mapping } from "../main.mts";
 import { upsertMappingLocal } from "./localStorage.mts";
 
-let leftPane = document.querySelector(".pane.left")!;
-let centerPane = document.querySelector(".pane.center")!;
-let rightPane = document.querySelector(".pane.right")!;
+let leftPaneUp = document.getElementById("pane-left-up")!;
+let leftPaneDown = document.getElementById("pane-left-down")!;
+let centerPane = document.getElementById("pane-center")!;
+let rightPane = document.getElementById("pane-right")!;
 
-let leftEditorView: EditorView;
+let leftUpEditorView: EditorView;
+let leftDownEditorView: EditorView;
 let centerEditorView: EditorView;
 let rightEditorView: EditorView;
 
@@ -92,7 +94,7 @@ function customScrollbar(darkMode: boolean) {
 function updateListenerExtension() {
   return EditorView.updateListener.of(async (update: ViewUpdate) => {
     if (update.docChanged && !inOverwrite) {
-      if (update.view === leftEditorView) {
+      if (update.view === leftDownEditorView) {
         currentMapping.source = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
         let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
@@ -108,7 +110,8 @@ function updateListenerExtension() {
 }
 
 export function makeEditorViews() {
-  leftEditorView = makeEditorView(leftPane, false, "json");
+  leftUpEditorView = makeEditorView(leftPaneUp, false, "json");
+  leftDownEditorView = makeEditorView(leftPaneDown, false, "json");
   centerEditorView = makeEditorView(centerPane, false, "javascript");
   rightEditorView = makeEditorView(rightPane, true, "json");
 }
@@ -120,7 +123,8 @@ export function setEditorTheme(darkMode: boolean) {
       scrollBar.reconfigure(darkMode ? darkScrollBar : lightScrollBar)
     ]
   };
-  leftEditorView.dispatch(transaction);
+  leftUpEditorView.dispatch(transaction);
+  leftDownEditorView.dispatch(transaction);
   centerEditorView.dispatch(transaction);
   rightEditorView.dispatch(transaction);
 }
@@ -139,7 +143,7 @@ function overwriteEditorContent(editorView: EditorView, content: string) {
 
 export async function setEditorContent(mapping: Mapping) {
   currentMapping = mapping;
-  overwriteEditorContent(leftEditorView, mapping.source);
+  overwriteEditorContent(leftDownEditorView, mapping.source);
   overwriteEditorContent(centerEditorView, mapping.mapping);
   let computed = await computeMapping(mapping.source, mapping.mapping);
   overwriteEditorContent(rightEditorView, computed);

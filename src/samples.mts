@@ -1,4 +1,131 @@
 export let invoiceSample = {
+  schema: `{
+  "properties": {
+    "invoice_id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "due_date": {
+      "type": "string"
+    },
+    "seller": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "properties": {
+            "street": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "zip_code": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          }
+        },
+        "contact": {
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "buyer": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "properties": {
+            "street": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "zip_code": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          }
+        },
+        "contact": {
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "items": {
+      "elements": {
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "float32"
+          },
+          "unit_price": {
+            "type": "float32"
+          }
+        }
+      }
+    },
+    "tax": {
+      "properties": {
+        "rate": {
+          "type": "float32"
+        },
+        "amount": {
+          "type": "float32"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+    "payment_status": {
+      "type": "string"
+    },
+    "payment_methods": {
+      "elements": {
+        "type": "string"
+      }
+    },
+    "terms": {
+      "type": "string"
+    }
+  }
+}`,
   source: `{
   "invoice_id": "INV-001",
   "date": "2024-12-01",
@@ -88,6 +215,20 @@ export let invoiceSample = {
 }
 
 export let itemSample = {
+  schema: `{
+  "properties": {
+    "product": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}`,
   source: `{
   "product": {
     "id": "QL-54905",

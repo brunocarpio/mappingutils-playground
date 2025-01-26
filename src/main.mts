@@ -18,6 +18,7 @@ let addMapping = document.getElementById("add-mapping-button") as HTMLButtonElem
 export interface Mapping {
   id: string;
   text: string;
+  schema: string;
   source: string;
   mapping: string;
 }
@@ -26,12 +27,14 @@ export let initialMappingList: Mapping[] = [
   {
     id: "56c91a03-95a7-4928-9a4d-85486b1f3ec1",
     text: "Item",
+    schema: itemSample.schema,
     source: itemSample.source,
     mapping: itemSample.mapping,
   },
   {
     id: "eb631d1c-170f-4aec-a368-2ac7a0b0516b",
     text: "Invoice",
+    schema: invoiceSample.schema,
     source: invoiceSample.source,
     mapping: invoiceSample.mapping,
   },
@@ -50,6 +53,7 @@ addMapping?.addEventListener("click", (e: MouseEvent) => {
     id,
     mapping: "",
     source: "",
+    schema: "",
     text: "",
   };
   upsertMappingLocal(mapping);

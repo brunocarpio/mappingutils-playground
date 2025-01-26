@@ -99,6 +99,9 @@ function updateListenerExtension() {
         upsertMappingLocal(currentMapping);
         let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
         overwriteEditorContent(rightEditorView, computed);
+      } else if (update.view === leftUpEditorView) {
+        currentMapping.schema = update.view.state.doc.toString();
+        upsertMappingLocal(currentMapping);
       } else if (update.view === centerEditorView) {
         currentMapping.mapping = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
@@ -144,6 +147,7 @@ function overwriteEditorContent(editorView: EditorView, content: string) {
 export async function setEditorContent(mapping: Mapping) {
   currentMapping = mapping;
   overwriteEditorContent(leftDownEditorView, mapping.source);
+  overwriteEditorContent(leftUpEditorView, mapping.schema);
   overwriteEditorContent(centerEditorView, mapping.mapping);
   let computed = await computeMapping(mapping.source, mapping.mapping);
   overwriteEditorContent(rightEditorView, computed);
@@ -177,7 +181,7 @@ export function addPrettyButtonsListener() {
       changes: {
         from: 0,
         to: leftUpEditorView.state.doc.length,
-        insert: JSON.stringify(JSON.parse(leftUpEditorView.state.doc.toString()), null, 2)
+        insert: JSON.stringify(JSON.parse(currentMapping.schema), null, 2)
       }
     });
   });

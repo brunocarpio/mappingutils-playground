@@ -14,6 +14,8 @@ let leftPaneDown = document.getElementById("pane-left-down")!;
 let centerPane = document.getElementById("pane-center")!;
 let rightPane = document.getElementById("pane-right")!;
 
+let prettyPrintSourceButton = document.getElementById("pretty-print-source");
+
 let leftUpEditorView: EditorView;
 let leftDownEditorView: EditorView;
 let centerEditorView: EditorView;
@@ -161,3 +163,13 @@ async function computeMapping(source: string, mapping: string): Promise<string> 
   }
 }
 
+prettyPrintSourceButton?.addEventListener("click", () => {
+  console.log("pretty print");
+  leftDownEditorView?.dispatch({
+    changes: {
+      from: 0,
+      to: leftDownEditorView.state.doc.length,
+      insert: JSON.stringify(JSON.parse(currentMapping.source), null, 2)
+    }
+  });
+});

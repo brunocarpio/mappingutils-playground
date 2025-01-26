@@ -29,14 +29,23 @@
 #main .section-header {
   background-color: var(--bg);
   color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   height: 30px;
   padding-left: 20px;
-  position: relative;
+  padding-right: 20px;
 }
 
 #main .section-header span {
   font-family: var(--font-mono);
   font-weight: bold;
-  position: absolute;
-  top: 4px;
+}
+
+#main .svg-button {
+  padding: 5px;
+}
+
+#main .tooltip::before {
+  width: 85px;
 }

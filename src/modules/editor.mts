@@ -95,18 +95,26 @@ function updateListenerExtension() {
   return EditorView.updateListener.of(async (update: ViewUpdate) => {
     if (update.docChanged && !inOverwrite) {
       if (update.view === leftDownEditorView) {
+        let didNotChange = currentMapping.source.replace(/\s+/g, "") === update.view.state.doc.toString().replace(/\s+/g, "");
         currentMapping.source = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
-        let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
-        overwriteEditorContent(rightEditorView, computed);
+        if (!didNotChange) {
+          console.log("computing");
+          let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
+          overwriteEditorContent(rightEditorView, computed);
+        }
       } else if (update.view === leftUpEditorView) {
         currentMapping.schema = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
       } else if (update.view === centerEditorView) {
+        let didNotChange = currentMapping.mapping.replace(/\s+/g, "") === update.view.state.doc.toString().replace(/\s+/g, "");
         currentMapping.mapping = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
-        let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
-        overwriteEditorContent(rightEditorView, computed);
+        if (!didNotChange) {
+          console.log("computing");
+          let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
+          overwriteEditorContent(rightEditorView, computed);
+        }
       }
     }
   });

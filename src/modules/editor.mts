@@ -7,7 +7,7 @@ import { githubLight } from "@ddietr/codemirror-themes/theme/github-light";
 import { githubDark } from "@ddietr/codemirror-themes/theme/github-dark";
 import ScriptEvaluator from "./ScriptEvaluator.mts";
 import { type Mapping } from "../main.mts";
-import { upsertMappingLocal } from "./localStorage.mts";
+import { getDarkModeLocal, upsertMappingLocal } from "./localStorage.mts";
 
 let leftPaneUp = document.getElementById("pane-left-up")!;
 let leftPaneDown = document.getElementById("pane-left-down")!;
@@ -119,7 +119,8 @@ export function makeEditorViews() {
   rightEditorView = makeEditorView(rightPane, true, "json");
 }
 
-export function setEditorTheme(darkMode: boolean) {
+export function setEditorTheme() {
+  let darkMode = getDarkModeLocal();
   let transaction = {
     effects: [
       theme.reconfigure(darkMode ? darkTheme : lightTheme),

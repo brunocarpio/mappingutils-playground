@@ -6,9 +6,7 @@ import "./styles/navbar.css"
 import { invoiceSample, itemSample } from "./samples.mts";
 import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
 import { addPrettyButtonsListener, makeEditorViews, setEditorContent, setEditorTheme } from "./modules/editor.mts";
-import { getAllMappingsLocal, initializeLocal, upsertMappingLocal } from "./modules/localStorage.mts";
-
-let darkMode = true;
+import { getAllMappingsLocal, getDarkModeLocal, initializeLocal, toggleDarkModeLocal, upsertMappingLocal } from "./modules/localStorage.mts";
 
 let body = document.querySelector<HTMLBodyElement>("body");
 let buttonDarkMode = document.querySelector<HTMLButtonElement>("#button-dark-mode");
@@ -41,9 +39,9 @@ export let initialMappingList: Mapping[] = [
 ];
 
 buttonDarkMode?.addEventListener("click", () => {
-  darkMode = !darkMode;
+  toggleDarkModeLocal();
   switchDarkMode();
-  setEditorTheme(darkMode);
+  setEditorTheme();
 });
 
 addMapping?.addEventListener("click", (e: MouseEvent) => {
@@ -62,6 +60,7 @@ addMapping?.addEventListener("click", (e: MouseEvent) => {
 });
 
 function switchDarkMode() {
+  let darkMode = getDarkModeLocal();
   if (darkMode) {
     body?.classList.replace("light", "dark");
     buttonDarkMode!.innerHTML = `
@@ -116,10 +115,12 @@ function addPrettyButtons() {
 }
 
 window.onload = (_) => {
-  addPrettyButtons();
   initializeLocal();
-  listMappings();
+  switchDarkMode();
   makeEditorViews();
+  setEditorTheme();
+  addPrettyButtons();
+  listMappings();
   let list = getAllMappingsLocal();
   if (list && list[0]) {
     setEditorContent(list[0]);

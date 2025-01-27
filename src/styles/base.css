@@ -1,140 +1,175 @@
 /* https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529 */
+/*https://coolors.co/palette/ff3c29-ff0000-d51111-a4061b*/
 :root {
-    --blue: #0284c7;
-    --font-mono: font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --font-title: font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    --gray0: #F8F9FA;
-    --gray10: #0a0c0d;
-    --gray11: #000000;
-    --gray1: #E9ECEF;
-    --gray2: #DEE2E6;
-    --gray3: #CED4DA;
-    --gray4: #ADB5BD;
-    --gray5: #6C757D;
-    --gray6: #495057;
-    --gray7: #343A40;
-    --gray8: #212529;
-    --gray9: #16181b;
-    --red: #FF5252;
+  --blue: #0284c7;
+  --font-mono: font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-title: font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
+  --gray0: #f8f9fa;
+  --gray10: #0a0c0d;
+  --gray11: #000000;
+  --gray1: #e9ecef;
+  --gray2: #dee2e6;
+  --gray3: #ced4da;
+  --gray4: #adb5bd;
+  --gray5: #6c757d;
+  --gray6: #495057;
+  --gray7: #343a40;
+  --gray8: #212529;
+  --gray9: #16181b;
+  --red0: #ff3c29;
+  --red1: #ff0000;
+  --red2: #d51111;
+  --red3: #a4061b;
+  --red4: #ff5252;
+  --red5: rgb(248, 215, 218);
+  --red6: rgb(114, 28, 36);
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 15px;
-    height: 100dvh;
-    margin: 0;
-    padding: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+  font-size: 15px;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
 }
 
 .light {
-    --bg: var(--gray0);
-    --border: var(--gray1);
-    --btn-hover: var(--gray1);
-    --menu-border: var(--gray2);
-    --nav-bg: var(--blue);
-    --text: var(--gray6);
+  --bg: var(--gray0);
+  --border: var(--gray1);
+  --btn-hover: var(--gray1);
+  --menu-border: var(--gray2);
+  --nav-bg: var(--blue);
+  --text: var(--gray6);
+  --red-delete: var(--red2);
+  --red-error: var(--red2);
+  --red-error-bg: var(--red5);
 }
 
 .dark {
-    --bg: var(--gray8);
-    --border: var(--gray7);
-    --btn-hover: var(--gray7);
-    --menu-border: var(--gray6);
-    --nav-bg: var(--gray9);
-    --text: var(--gray1);
+  --bg: var(--gray8);
+  --border: var(--gray7);
+  --btn-hover: var(--gray7);
+  --menu-border: var(--gray6);
+  --nav-bg: var(--gray9);
+  --text: var(--gray1);
+  --red-delete: var(--red4);
+  --red-error: var(--red5);
+  --red-error-bg: var(--red6);
 }
 
 .svg-button {
-    background: none;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    padding: 8px;
-    position: relative;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px;
+  position: relative;
 }
 
 .svg-button:hover {
-    background-color: rgb(from var(--btn-hover) r g b / 0.5);
+  background-color: rgb(from var(--btn-hover) r g b / 0.5);
 }
 
 .svg-button svg {
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .svg-button path {
-    stroke: var(--text);
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .tooltip {
-    position: relative;
+  position: relative;
 }
 
 .tooltip::before {
-    background-color: var(--gray9);
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    color: var(--gray0);
-    content: attr(data-text);
-    display: none;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 6px 0;
-    position: absolute;
-    text-align: center;
-    width: 100px;
-    z-index: 1;
+  background-color: var(--gray9);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  color: var(--gray0);
+  content: attr(data-text);
+  display: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 0;
+  position: absolute;
+  text-align: center;
+  width: 100px;
+  z-index: 1;
 }
 
 .tooltip.tbottom::before {
-    left: initial;
-    top: initial;
-    margin: initial;
-    left: 50%;
-    top: 100%;
-    margin-left: -50px;
-    margin-top: 10px;
+  left: initial;
+  top: initial;
+  margin: initial;
+  left: 50%;
+  top: 100%;
+  margin-left: -50px;
+  margin-top: 10px;
 }
 
 .tooltip.tbottom::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent var(--gray7) transparent;
-    display: none;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent var(--gray7) transparent;
+  display: none;
 }
 
 .tooltip.ttop::before {
-    left: initial;
-    top: initial;
-    margin: initial;
-    left: 50%;
-    bottom: 100%;
-    margin-left: -35px;
-    margin-bottom: 10px;
-    width: 70px;
+  left: initial;
+  top: initial;
+  margin: initial;
+  left: 50%;
+  bottom: 100%;
+  margin-left: -35px;
+  margin-bottom: 10px;
+  width: 70px;
 }
 
 .tooltip.ttop::after {
-    content: "";
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: var(--gray7) transparent transparent transparent;
-    display: none;
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--gray7) transparent transparent transparent;
+  display: none;
 }
 
-.tooltip:hover::before, .tooltip:hover::after {
-    display: block;
+.tooltip:hover::before,
+.tooltip:hover::after {
+  display: block;
 }
 
+.error {
+  background-color: var(--red-error-bg);
+  color: var(--red-error);
+  padding: 2px 5px;
+  border-radius: 3px;
+  display: none;
+}

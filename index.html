@@ -1,107 +1,158 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="mappingutils playground. An interactive playground to test JSON to JSON mappings"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <title>mappingutils playground</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="mappingutils playground. An interactive playground to test JSON to JSON mappings" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-  <title>mappingutils playground</title>
-</head>
+  <body class="dark">
+    <nav id="navbar">
+      <ul>
+        <li class="nav-title">mappingutils</li>
+        <li class="nav-links">
+          <button id="button-dark-mode">
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M7 0h2v2H7zM12.88 1.637l1.414 1.415-1.415 1.413-1.413-1.414zM14 7h2v2h-2zM12.95 14.433l-1.414-1.413 1.413-1.415 1.415 1.414zM7 14h2v2H7zM2.98 14.364l-1.413-1.415 1.414-1.414 1.414 1.415zM0 7h2v2H0zM3.05 1.706 4.463 3.12 3.05 4.535 1.636 3.12z"
+              />
+              <path d="M8 4C5.8 4 4 5.8 4 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4Z" />
+            </svg>
+          </button>
+          <a href="https://github.com/brunocarpio/mappingutils" target="_blank">
+            <img
+              src="/github-mark-white.svg"
+              alt="github cat logo"
+              width="30"
+            />
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div id="main-container">
+      <aside id="aside">
+        <div class="edit-container">
+          <button
+            aria-label="Add New Mapping"
+            class="tooltip tbottom svg-button"
+            data-text="New mapping"
+            id="add-mapping-button"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="25px"
+              height="25px"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
+              ></path>
+              <path
+                d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <ul id="mappings"></ul>
+      </aside>
+      <main id="main">
+        <div>
+          <div id="pane-left-up">
+            <div class="section-header">
+              <span>
+                <a
+                  class="no-link"
+                  href="https://jsontypedef.com/docs/jtd-in-5-minutes/"
+                  target="_blank"
+                  >JSON Type Definition Schema</a
+                >
+              </span>
+            </div>
+          </div>
+          <div id="pane-left-down">
+            <div class="section-header">
+              <span>Source JSON</span>
+              <span class="error" id="source-error">Error</span>
+            </div>
+          </div>
+        </div>
+        <div id="pane-center">
+          <div class="section-header"><span>Mapping Transformation</span></div>
+        </div>
+        <div id="pane-right">
+          <div class="section-header"><span>Target JSON</span></div>
+        </div>
+      </main>
+    </div>
 
-<body class="dark">
-  <nav id="navbar">
-    <ul>
-      <li class="nav-title">mappingutils</li>
-      <li class="nav-links">
-        <button id="button-dark-mode">
-          <svg xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M7 0h2v2H7zM12.88 1.637l1.414 1.415-1.415 1.413-1.413-1.414zM14 7h2v2h-2zM12.95 14.433l-1.414-1.413 1.413-1.415 1.415 1.414zM7 14h2v2H7zM2.98 14.364l-1.413-1.415 1.414-1.414 1.414 1.415zM0 7h2v2H0zM3.05 1.706 4.463 3.12 3.05 4.535 1.636 3.12z" />
-            <path d="M8 4C5.8 4 4 5.8 4 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4Z" />
+    <template id="mappingli-template">
+      <li class="mapping-li">
+        <input type="button" class="button-text" placeholder="New Mapping" />
+        <button
+          class="tooltip ttop"
+          aria-label="options-button"
+          data-text="Options"
+        >
+          <svg
+            fill="currentColor"
+            height="18"
+            transform="translate(0 4)"
+            viewBox="0 0 30 30"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="5" cy="12" r="2" />
+            <circle cx="12" cy="12" r="2" />
+            <circle cx="19" cy="12" r="2" />
           </svg>
         </button>
-        <a href="https://github.com/brunocarpio/mappingutils" target="_blank">
-          <img src="/github-mark-white.svg" alt="github cat logo" width="30" />
-        </a>
+        <ul class="menu" popover="auto">
+          <li><button id="button-rename">Rename</button></li>
+          <li><button class="button-delete">Delete</button></li>
+        </ul>
       </li>
-    </ul>
-  </nav>
-  <div id="main-container">
-    <aside id="aside">
-      <div class="edit-container">
-        <button aria-label="Add New Mapping" class="tooltip tbottom svg-button" data-text="New mapping"
-          id="add-mapping-button">
-          <svg viewBox="0 0 24 24" width="25px" height="25px" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z">
-            </path>
-            <path
-              d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13">
-            </path>
-          </svg>
-        </button>
-      </div>
-      <ul id="mappings"></ul>
-    </aside>
-    <main id="main">
-      <div>
-        <div id="pane-left-up">
-          <div class="section-header">
-            <span>
-              <a class="no-link" href="https://jsontypedef.com/docs/jtd-in-5-minutes/" target="_blank">JSON Type Definition Schema</a>
-            </span>
-          </div>
-        </div>
-        <div id="pane-left-down">
-          <div class="section-header"><span>Source JSON</span>
-          </div>
-        </div>
-      </div>
-      <div id="pane-center">
-        <div class="section-header"><span>Mapping Transformation</span></div>
-      </div>
-      <div id="pane-right">
-        <div class="section-header"><span>Target JSON</span></div>
-      </div>
-    </main>
-  </div>
+    </template>
 
-  <template id="mappingli-template">
-    <li class="mapping-li">
-      <input type="button" class="button-text" placeholder="New Mapping">
-      <button class="tooltip ttop" aria-label="options-button" data-text="Options">
-        <svg fill="currentColor" height="18" transform="translate(0 4)" viewBox="0 0 30 30" width="18"
-          xmlns="http://www.w3.org/2000/svg">
-          <circle cx="5" cy="12" r="2" />
-          <circle cx="12" cy="12" r="2" />
-          <circle cx="19" cy="12" r="2" />
+    <template id="pretty-print-button-template">
+      <button
+        aria-label="Pretty print"
+        class="tooltip tbottom svg-button"
+        data-text="Pretty print"
+      >
+        <svg
+          viewBox="0 0 22 22"
+          width="20px"
+          height="20px"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            <path
+              d="M14 19H16C17.1046 19 18 18.1046 18 17V14.5616C18 13.6438 18.6246 12.8439 19.5149 12.6213L21.0299 12.2425C21.2823 12.1794 21.2823 11.8206 21.0299 11.7575L19.5149 11.3787C18.6246 11.1561 18 10.3562 18 9.43845V5H14"
+              stroke="#33363F"
+              stroke-width="2"
+            ></path>
+            <path
+              d="M10 5H8C6.89543 5 6 5.89543 6 7V9.43845C6 10.3562 5.37541 11.1561 4.48507 11.3787L2.97014 11.7575C2.71765 11.8206 2.71765 12.1794 2.97014 12.2425L4.48507 12.6213C5.37541 12.8439 6 13.6438 6 14.5616V19H10"
+              stroke="#33363F"
+              stroke-width="2"
+            ></path>
+          </g>
         </svg>
       </button>
-      <ul class="menu" popover="auto">
-        <li><button id="button-rename">Rename</button></li>
-        <li><button class="button-delete">Delete</button></li>
-      </ul>
-    </li>
-  </template>
-
-  <template id="pretty-print-button-template">
-    <button aria-label="Pretty print" class="tooltip tbottom svg-button" data-text="Pretty print">
-      <svg viewBox="0 0 22 22" width="20px" height="20px" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-        <g id="SVGRepo_iconCarrier">
-          <path
-            d="M14 19H16C17.1046 19 18 18.1046 18 17V14.5616C18 13.6438 18.6246 12.8439 19.5149 12.6213L21.0299 12.2425C21.2823 12.1794 21.2823 11.8206 21.0299 11.7575L19.5149 11.3787C18.6246 11.1561 18 10.3562 18 9.43845V5H14"
-            stroke="#33363F" stroke-width="2"></path>
-          <path
-            d="M10 5H8C6.89543 5 6 5.89543 6 7V9.43845C6 10.3562 5.37541 11.1561 4.48507 11.3787L2.97014 11.7575C2.71765 11.8206 2.71765 12.1794 2.97014 12.2425L4.48507 12.6213C5.37541 12.8439 6 13.6438 6 14.5616V19H10"
-            stroke="#33363F" stroke-width="2"></path>
-        </g>
-      </svg>
-    </button>
-  </template>
-  <script type="module" src="/src/main.mts"></script>
-</body>
-
+    </template>
+    <script type="module" src="/src/main.mts"></script>
+  </body>
 </html>

@@ -21,9 +21,9 @@ let rightEditorView: EditorView;
 
 let lightTheme: Extension = githubLight;
 let darkTheme: Extension = githubDark;
-let theme: Compartment = new Compartment;
+let theme: Compartment = new Compartment();
 
-let scrollBar: Compartment = new Compartment;
+let scrollBar: Compartment = new Compartment();
 let lightScrollBar = customScrollbar(false);
 let darkScrollBar = customScrollbar(true);
 
@@ -47,7 +47,7 @@ function createEditorState(readOnly: boolean, lang: string) {
     updateListenerExtension(),
     EditorView.lineWrapping,
     theme.of(darkTheme),
-    scrollBar.of(darkScrollBar)
+    scrollBar.of(darkScrollBar),
   ];
   if (readOnly) {
     extensions.push(EditorState.readOnly.of(true));
@@ -59,19 +59,19 @@ function makeEditorView(parent: Element, readOnly: boolean, lang: string) {
   let state = createEditorState(readOnly, lang);
   return new EditorView({
     state,
-    parent
+    parent,
   });
 }
 
 function fixedHeightEditorExtension() {
   return EditorView.theme({
     "&": {
-      "height": "calc(100% - 30px)",
+      height: "calc(100% - 30px)",
     },
     ".cm-scroller": {
-      "overflow": "auto",
-      "scrollbar-width": "thin"
-    }
+      overflow: "auto",
+      "scrollbar-width": "thin",
+    },
   });
 }
 
@@ -95,24 +95,45 @@ function updateListenerExtension() {
   return EditorView.updateListener.of(async (update: ViewUpdate) => {
     if (update.docChanged && !inOverwrite) {
       if (update.view === leftDownEditorView) {
-        let didNotChange = currentMapping.source.replace(/\s+/g, "") === update.view.state.doc.toString().replace(/\s+/g, "");
+        let didNotChange =
+          currentMapping.source.replace(/\s+/g, "") ===
+          update.view.state.doc.toString().replace(/\s+/g, "");
         currentMapping.source = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
-        if (!didNotChange) {
+        let isValid = true;
+        let sourceErrorSpan = document.getElementById("source-error")!;
+        try {
+          JSON.parse(currentMapping.source);
+        } catch (error) {
+          sourceErrorSpan.textContent = "Malformed JSON";
+          sourceErrorSpan.style.display = "inline";
+          isValid = false;
+          overwriteEditorContent(rightEditorView, "[]");
+        }
+        if (!didNotChange && isValid) {
           console.log("computing");
-          let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
+          sourceErrorSpan.style.display = "none";
+          let computed = await computeMapping(
+            currentMapping.source,
+            currentMapping.mapping,
+          );
           overwriteEditorContent(rightEditorView, computed);
         }
       } else if (update.view === leftUpEditorView) {
         currentMapping.schema = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
       } else if (update.view === centerEditorView) {
-        let didNotChange = currentMapping.mapping.replace(/\s+/g, "") === update.view.state.doc.toString().replace(/\s+/g, "");
+        let didNotChange =
+          currentMapping.mapping.replace(/\s+/g, "") ===
+          update.view.state.doc.toString().replace(/\s+/g, "");
         currentMapping.mapping = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
         if (!didNotChange) {
           console.log("computing");
-          let computed = await computeMapping(currentMapping.source, currentMapping.mapping);
+          let computed = await computeMapping(
+            currentMapping.source,
+            currentMapping.mapping,
+          );
           overwriteEditorContent(rightEditorView, computed);
         }
       }
@@ -132,8 +153,8 @@ export function setEditorTheme() {
   let transaction = {
     effects: [
       theme.reconfigure(darkMode ? darkTheme : lightTheme),
-      scrollBar.reconfigure(darkMode ? darkScrollBar : lightScrollBar)
-    ]
+      scrollBar.reconfigure(darkMode ? darkScrollBar : lightScrollBar),
+    ],
   };
   leftUpEditorView.dispatch(transaction);
   leftDownEditorView.dispatch(transaction);
@@ -147,8 +168,8 @@ function overwriteEditorContent(editorView: EditorView, content: string) {
     changes: {
       from: 0,
       to: editorView.state.doc.length,
-      insert: content
-    }
+      insert: content,
+    },
   });
   inOverwrite = false;
 }
@@ -162,12 +183,15 @@ export async function setEditorContent(mapping: Mapping) {
   overwriteEditorContent(rightEditorView, computed);
 }
 
-async function computeMapping(source: string, mapping: string): Promise<string> {
+async function computeMapping(
+  source: string,
+  mapping: string,
+): Promise<string> {
   try {
     return JSON.stringify(
       await evaluator.evalAsync({ source, mapping }),
       null,
-      2
+      2,
     );
   } catch (err: any) {
     return err.toString();
@@ -175,23 +199,27 @@ async function computeMapping(source: string, mapping: string): Promise<string> 
 }
 
 export function addPrettyButtonsListener() {
-  document.getElementById("pretty-print-source")?.addEventListener("click", () => {
-    leftDownEditorView?.dispatch({
-      changes: {
-        from: 0,
-        to: leftDownEditorView.state.doc.length,
-        insert: JSON.stringify(JSON.parse(currentMapping.source), null, 2)
-      }
+  document
+    .getElementById("pretty-print-source")
+    ?.addEventListener("click", () => {
+      leftDownEditorView?.dispatch({
+        changes: {
+          from: 0,
+          to: leftDownEditorView.state.doc.length,
+          insert: JSON.stringify(JSON.parse(currentMapping.source), null, 2),
+        },
+      });
     });
-  });
 
-  document.getElementById("pretty-print-schema")?.addEventListener("click", () => {
-    leftUpEditorView?.dispatch({
-      changes: {
-        from: 0,
-        to: leftUpEditorView.state.doc.length,
-        insert: JSON.stringify(JSON.parse(currentMapping.schema), null, 2)
-      }
+  document
+    .getElementById("pretty-print-schema")
+    ?.addEventListener("click", () => {
+      leftUpEditorView?.dispatch({
+        changes: {
+          from: 0,
+          to: leftUpEditorView.state.doc.length,
+          insert: JSON.stringify(JSON.parse(currentMapping.schema), null, 2),
+        },
+      });
     });
-  });
 }

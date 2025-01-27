@@ -1,17 +1,31 @@
-import "./styles/aside.css"
-import "./styles/base.css"
-import "./styles/main.css"
-import "./styles/navbar.css"
+import "./styles/aside.css";
+import "./styles/base.css";
+import "./styles/main.css";
+import "./styles/navbar.css";
 
 import { invoiceSample, itemSample } from "./samples.mts";
 import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
-import { addPrettyButtonsListener, makeEditorViews, setEditorContent, setEditorTheme } from "./modules/editor.mts";
-import { getAllMappingsLocal, getDarkModeLocal, initializeLocal, toggleDarkModeLocal, upsertMappingLocal } from "./modules/localStorage.mts";
+import {
+  addPrettyButtonsListener,
+  makeEditorViews,
+  setEditorContent,
+  setEditorTheme,
+} from "./modules/editor.mts";
+import {
+  getAllMappingsLocal,
+  getDarkModeLocal,
+  initializeLocal,
+  toggleDarkModeLocal,
+  upsertMappingLocal,
+} from "./modules/localStorage.mts";
 
 let body = document.querySelector<HTMLBodyElement>("body");
-let buttonDarkMode = document.querySelector<HTMLButtonElement>("#button-dark-mode");
+let buttonDarkMode =
+  document.querySelector<HTMLButtonElement>("#button-dark-mode");
 let mappingUl = document.getElementById("mappings") as HTMLUListElement;
-let addMapping = document.getElementById("add-mapping-button") as HTMLButtonElement;
+let addMapping = document.getElementById(
+  "add-mapping-button",
+) as HTMLButtonElement;
 
 export interface Mapping {
   id: string;
@@ -93,7 +107,9 @@ function listMappings() {
 }
 
 function appendPrettifyButton(id: string, parent: HTMLElement) {
-  let template = document.getElementById("pretty-print-button-template") as HTMLTemplateElement;
+  let template = document.getElementById(
+    "pretty-print-button-template",
+  ) as HTMLTemplateElement;
   let clone = template?.content.cloneNode(true) as HTMLElement;
   let button = clone.querySelector("button");
   if (button) {
@@ -103,11 +119,15 @@ function appendPrettifyButton(id: string, parent: HTMLElement) {
 }
 
 function addPrettyButtons() {
-  let sourceHeader = document.querySelector("#pane-left-down .section-header") as HTMLElement;
+  let sourceHeader = document.querySelector(
+    "#pane-left-down .section-header",
+  ) as HTMLElement;
   if (sourceHeader) {
     appendPrettifyButton("pretty-print-source", sourceHeader);
   }
-  let schemaHeader = document.querySelector("#pane-left-up .section-header") as HTMLElement;
+  let schemaHeader = document.querySelector(
+    "#pane-left-up .section-header",
+  ) as HTMLElement;
   if (schemaHeader) {
     appendPrettifyButton("pretty-print-schema", schemaHeader);
   }
@@ -125,5 +145,4 @@ window.onload = (_) => {
   if (list && list[0]) {
     setEditorContent(list[0]);
   }
-}
-
+};

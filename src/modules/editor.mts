@@ -24,6 +24,7 @@ import {
   hiddenRangesField,
   hideTextEffect,
 } from "./customExtensions.mts";
+import { replacer } from "./lib.mts";
 
 let leftPaneUp = document.getElementById("pane-left-up")!;
 let leftPaneDown = document.getElementById("pane-left-down")!;
@@ -148,8 +149,10 @@ function updateListenerExtension() {
     if (update.docChanged && !inOverwrite) {
       if (update.view === leftDownEditorView) {
         leftDownChanged =
-          currentMapping.source.replace(/\s+/g, "") !==
-          update.view.state.doc.toString().replace(/\s+/g, "");
+          currentMapping.source.replace(/("[^"]*")|(\s+)/g, replacer) !==
+          update.view.state.doc
+            .toString()
+            .replace(/("[^"]*")|(\s+)/g, replacer);
         currentMapping.source = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
       } else if (update.view === leftUpEditorView) {

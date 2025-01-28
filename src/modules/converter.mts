@@ -1,5 +1,6 @@
 export default function assignMapping(mapping: string): object {
-    let m = {};
-    eval(`m = ${mapping}`);
-    return m;
+  let hidden = mapping.substring(8);
+  let m = {};
+  eval(`m = ${hidden}`);
+  return m;
 }

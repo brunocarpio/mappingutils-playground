@@ -114,7 +114,7 @@ function updateListenerExtension() {
         diagnosticCount(update.state) > 0 &&
         sourceErrorSpan.style.display === "none"
       ) {
-        sourceErrorSpan.textContent = "Syntax errors";
+        sourceErrorSpan.textContent = "Syntax Error";
         sourceErrorSpan.style.display = "inline";
         overwriteEditorContent(rightEditorView, "[]");
       } else if (diagnosticCount(update.state) === 0 && leftDownChanged) {
@@ -133,7 +133,7 @@ function updateListenerExtension() {
         diagnosticCount(update.state) > 0 &&
         mappingErrorSpan.style.display === "none"
       ) {
-        mappingErrorSpan.textContent = "Syntax errors";
+        mappingErrorSpan.textContent = "Syntax Error";
         mappingErrorSpan.style.display = "inline";
         overwriteEditorContent(rightEditorView, "[]");
       } else if (diagnosticCount(update.state) === 0 && centerChanged) {

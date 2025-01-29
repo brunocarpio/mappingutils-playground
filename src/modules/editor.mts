@@ -173,8 +173,8 @@ function updateListenerExtension() {
         upsertMappingLocal(currentMapping);
       } else if (update.view === centerEditorView) {
         centerChanged =
-          currentMapping.mapping.replace(/\s+/g, "") !==
-          update.view.state.doc.toString().replace(/\s+/g, "");
+          currentMapping.mapping.replace(/("[^"]*")|(\s+)/g, "") !==
+          update.view.state.doc.toString().replace(/("[^"]*")|(\s+)/g, "");
         currentMapping.mapping = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
       }

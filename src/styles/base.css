@@ -1,5 +1,6 @@
 /* https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529 */
-/*https://coolors.co/palette/ff3c29-ff0000-d51111-a4061b*/
+/* https://coolors.co/palette/ff3c29-ff0000-d51111-a4061b */
+/* https://coolors.co/palette/d8f3dc-b7e4c7-95d5b2-74c69d-52b788-40916c-2d6a4f-1b4332-081c15 */
 :root {
   --blue: #0284c7;
   --font-mono: font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
@@ -26,6 +27,15 @@
   --red4: #ff5252;
   --red5: rgb(248, 215, 218);
   --red6: rgb(114, 28, 36);
+  --green0: #d8f3dcff;
+  --green1: #b7e4c7ff;
+  --green2: #95d5b2ff;
+  --green3: #74c69dff;
+  --green4: #52b788ff;
+  --green5: #40916cff;
+  --green6: #2d6a4fff;
+  --green7: #1b4332ff;
+  --green8: #081c15ff;
 }
 
 body {
@@ -55,8 +65,10 @@ body {
   --nav-bg: var(--blue);
   --text: var(--gray6);
   --red-delete: var(--red2);
-  --red-error: var(--red2);
-  --red-error-bg: var(--red5);
+  --error-bg: var(--red5);
+  --error-txt: var(--red2);
+  --success-bg: var(--green0);
+  --success-txt: var(--green5);
 }
 
 .dark {
@@ -67,8 +79,10 @@ body {
   --nav-bg: var(--gray9);
   --text: var(--gray1);
   --red-delete: var(--red4);
-  --red-error: var(--red5);
-  --red-error-bg: var(--red6);
+  --error-bg: var(--red6);
+  --error-txt: var(--red5);
+  --success-bg: var(--green6);
+  --success-txt: var(--green0);
 }
 
 .svg-button {
@@ -167,9 +181,16 @@ body {
 }
 
 .error {
-  background-color: var(--red-error-bg);
-  color: var(--red-error);
-  padding: 2px 5px;
+  background-color: var(--error-bg);
+  color: var(--error-txt);
+  padding: 2px 8px;
   border-radius: 3px;
   display: none;
+}
+
+.success {
+  background-color: var(--success-bg);
+  color: var(--success-txt);
+  padding: 2px 8px;
+  border-radius: 3px;
 }

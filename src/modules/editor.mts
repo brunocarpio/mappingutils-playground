@@ -18,7 +18,7 @@ import {
   hiddenRangesField,
   hideTextEffect,
 } from "./customExtensions.mts";
-import { replacer } from "./lib.mts";
+import { replacer, isValidFromJTD } from "./lib.mts";
 
 let leftPaneUp = document.getElementById("pane-left-up")!;
 let leftPaneDown = document.getElementById("pane-left-down")!;
@@ -101,25 +101,25 @@ function makeEditorView(parent: Element, readOnly: boolean, lang: string) {
 function updateListenerExtension() {
   let leftDownChanged = true;
   let centerChanged = true;
+  let validJSON = true;
   return EditorView.updateListener.of(async (update: ViewUpdate) => {
     if (update.view === leftDownEditorView) {
       let sourceErrorSpan = document.getElementById("source-error")!;
-      if (
-        diagnosticCount(update.state) > 0 &&
-        sourceErrorSpan.style.display === "none"
-      ) {
+      if (diagnosticCount(update.state) > 0) {
         sourceErrorSpan.textContent = "Syntax Error";
-        sourceErrorSpan.style.display = "inline";
+        sourceErrorSpan.classList.replace("success", "error");
         overwriteEditorContent(rightEditorView, "[]");
-      } else if (diagnosticCount(update.state) === 0 && leftDownChanged) {
-        sourceErrorSpan.style.display = "none";
+      }
+      if (diagnosticCount(update.state) === 0 && leftDownChanged) {
         leftDownChanged = false;
-        if (currentMapping) {
+        if (currentMapping && validJSON) {
           let computed = await computeMapping(
             currentMapping.source,
             currentMapping.mapping,
           );
           overwriteEditorContent(rightEditorView, computed);
+        } else if (!validJSON) {
+          overwriteEditorContent(rightEditorView, "[]");
         }
       }
     }
@@ -135,12 +135,14 @@ function updateListenerExtension() {
       } else if (diagnosticCount(update.state) === 0 && centerChanged) {
         mappingErrorSpan.style.display = "none";
         centerChanged = false;
-        if (currentMapping) {
+        if (currentMapping && validJSON) {
           let computed = await computeMapping(
             currentMapping.source,
             currentMapping.mapping,
           );
           overwriteEditorContent(rightEditorView, computed);
+        } else if (!validJSON) {
+          overwriteEditorContent(rightEditorView, "[]");
         }
       }
     }
@@ -153,6 +155,19 @@ function updateListenerExtension() {
             .replace(/("[^"]*")|(\s+)/g, replacer);
         currentMapping.source = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
+        if (leftDownChanged) {
+          let sourceErrorSpan = document.getElementById("source-error")!;
+          sourceErrorSpan.style.display = "inline";
+          if (!isValidFromJTD(currentMapping.schema, currentMapping.source)) {
+            validJSON = false;
+            sourceErrorSpan.textContent = "Invalid JSON";
+            sourceErrorSpan.classList.replace("success", "error");
+          } else {
+            validJSON = true;
+            sourceErrorSpan.textContent = "Valid JSON";
+            sourceErrorSpan.classList.replace("error", "success");
+          }
+        }
       } else if (update.view === leftUpEditorView) {
         currentMapping.schema = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);

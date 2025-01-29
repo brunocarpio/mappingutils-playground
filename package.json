@@ -20,6 +20,7 @@
     "@codemirror/lint": "^6.8.4",
     "@codemirror/view": "^6.36.2",
     "@ddietr/codemirror-themes": "^1.5.1",
+    "ajv": "^8.17.1",
     "codemirror": "^6.0.1",
     "eslint-linter-browserify": "^9.19.0",
     "mappingutils": "^2.2.0"

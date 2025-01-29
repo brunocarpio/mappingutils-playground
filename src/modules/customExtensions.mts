@@ -30,7 +30,7 @@ export let hiddenRangesField = StateField.define<DecorationSet>({
 export function fixedHeightEditorExtension() {
   return EditorView.theme({
     "&": {
-      height: "calc(100% - 30px)",
+      height: "calc(100% - 42px)",
     },
     ".cm-scroller": {
       overflow: "auto",

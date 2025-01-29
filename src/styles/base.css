@@ -1,8 +1,16 @@
 /* https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529 */
 /* https://coolors.co/palette/ff3c29-ff0000-d51111-a4061b */
 /* https://coolors.co/palette/d8f3dc-b7e4c7-95d5b2-74c69d-52b788-40916c-2d6a4f-1b4332-081c15 */
+/* https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8 */
 :root {
   --blue: #0284c7;
+  --blue0: #caf0f8;
+  --blue1: #90e0ef;
+  --blue2: #0096c7;
+  --blue3: #0077b6;
+  --blue4: #023e8a;
+  --blue5: #03045e;
+  --blue6: #001d3d;
   --font-mono: font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
   --font-title: font-family: system-ui, -apple-system, BlinkMacSystemFont,
@@ -69,6 +77,9 @@ body {
   --error-txt: var(--red2);
   --success-bg: var(--green0);
   --success-txt: var(--green5);
+  --outline-button-border-color: var(--blue3);
+  --outline-button-background: var(--blue0);
+  --outline-button-border-color-hover: var(--blue6);
 }
 
 .dark {
@@ -83,6 +94,9 @@ body {
   --error-txt: var(--red5);
   --success-bg: var(--green6);
   --success-txt: var(--green0);
+  --outline-button-border-color: var(--blue2);
+  --outline-button-background-hover: var(--bg);
+  --outline-button-border-color-hover: var(--blue1);
 }
 
 .svg-button {
@@ -193,4 +207,29 @@ body {
   color: var(--success-txt);
   padding: 2px 8px;
   border-radius: 3px;
+}
+
+.format-json {
+  background-color: transparent;
+  border-color: var(--outline-button-border-color);
+  border-radius: 15px;
+  border-style: solid;
+  color: var(--outline-button-border-color);
+  font-size: 14px;
+  font-weight: bold;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  cursor: pointer;
+  padding: 6px 17px;
+}
+
+.format-json:hover {
+  background-color: rgb(
+    from var(--outline-button-background-hover) r g b / 0.5
+  );
+  border-color: var(--outline-button-border-color-hover);
+  color: var(--outline-button-border-color-hover);
 }

@@ -8,13 +8,7 @@ import { githubDark } from "@ddietr/codemirror-themes/theme/github-dark";
 import ScriptEvaluator from "./ScriptEvaluator.mts";
 import { type Mapping } from "../main.mts";
 import { getDarkModeLocal, upsertMappingLocal } from "./localStorage.mts";
-import {
-  diagnosticCount,
-  forEachDiagnostic,
-  linter,
-  lintGutter,
-  setDiagnosticsEffect,
-} from "@codemirror/lint";
+import { diagnosticCount, linter, lintGutter } from "@codemirror/lint";
 
 import globals from "globals";
 import * as eslint from "eslint-linter-browserify";
@@ -105,8 +99,8 @@ function makeEditorView(parent: Element, readOnly: boolean, lang: string) {
 }
 
 function updateListenerExtension() {
-  let leftDownChanged = false;
-  let centerChanged = false;
+  let leftDownChanged = true;
+  let centerChanged = true;
   return EditorView.updateListener.of(async (update: ViewUpdate) => {
     if (update.view === leftDownEditorView) {
       let sourceErrorSpan = document.getElementById("source-error")!;
@@ -120,11 +114,13 @@ function updateListenerExtension() {
       } else if (diagnosticCount(update.state) === 0 && leftDownChanged) {
         sourceErrorSpan.style.display = "none";
         leftDownChanged = false;
-        let computed = await computeMapping(
-          currentMapping.source,
-          currentMapping.mapping,
-        );
-        overwriteEditorContent(rightEditorView, computed);
+        if (currentMapping) {
+          let computed = await computeMapping(
+            currentMapping.source,
+            currentMapping.mapping,
+          );
+          overwriteEditorContent(rightEditorView, computed);
+        }
       }
     }
     if (update.view === centerEditorView) {
@@ -139,11 +135,13 @@ function updateListenerExtension() {
       } else if (diagnosticCount(update.state) === 0 && centerChanged) {
         mappingErrorSpan.style.display = "none";
         centerChanged = false;
-        let computed = await computeMapping(
-          currentMapping.source,
-          currentMapping.mapping,
-        );
-        overwriteEditorContent(rightEditorView, computed);
+        if (currentMapping) {
+          let computed = await computeMapping(
+            currentMapping.source,
+            currentMapping.mapping,
+          );
+          overwriteEditorContent(rightEditorView, computed);
+        }
       }
     }
     if (update.docChanged && !inOverwrite) {

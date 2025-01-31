@@ -84,6 +84,6 @@ self.onmessage = (event) => {
     postMessage(result);
   } catch (error) {
     console.log(error);
-    postMessage([]);
+    postMessage(new Error("mapping failed", { cause: error }));
   }
 };

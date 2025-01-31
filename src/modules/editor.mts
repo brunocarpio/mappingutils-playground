@@ -239,14 +239,14 @@ async function computeMapping(
   mapping: string,
 ): Promise<string> {
   try {
-    JSON.parse(source);
-    return JSON.stringify(
-      await evaluator.evalAsync({ source, mapping }),
-      null,
-      2,
-    );
+    let computed = await evaluator.evalAsync({ source, mapping });
+    if (computed instanceof Error) {
+      return "" + computed.cause;
+    } else {
+      return JSON.stringify(computed, null, 2);
+    }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return Promise.resolve("[]");
   }
 }

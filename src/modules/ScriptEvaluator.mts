@@ -19,7 +19,7 @@ export default class ScriptEvaluator {
   public async evalAsync(
     message: { source: string; mapping: string },
     timeout = 1000,
-  ): Promise<string> {
+  ): Promise<unknown> {
     let worker = await this.getWorker();
     if (worker) {
       return new Promise((resolve, reject) => {

@@ -7,7 +7,7 @@ export function initializeLocal() {
   }
   let darkMode = localStorage.getItem("darkMode");
   if (!darkMode) {
-    localStorage.setItem("darkMode", "true");
+    localStorage.setItem("darkMode", "false");
   }
 }
 
@@ -28,7 +28,7 @@ export function toggleDarkModeLocal() {
 export function upsertMappingLocal(mapping: Mapping) {
   let local = localStorage.getItem("mappingList");
   if (local) {
-    let mappingList = JSON.parse(local) as Mapping[]
+    let mappingList = JSON.parse(local) as Mapping[];
     let index = mappingList.findIndex((m) => m.id === mapping.id);
     if (index > -1) {
       mappingList.splice(index, 1, mapping);
@@ -44,7 +44,7 @@ export function upsertMappingLocal(mapping: Mapping) {
 export function getMappingLocal(id: string): Mapping | null {
   let local = localStorage.getItem("mappingList");
   if (local) {
-    let mappingList = JSON.parse(local) as Mapping[]
+    let mappingList = JSON.parse(local) as Mapping[];
     let index = mappingList.findIndex((m) => m.id === id);
     if (index > -1) {
       return mappingList[index];
@@ -59,7 +59,7 @@ export function getMappingLocal(id: string): Mapping | null {
 export function getAllMappingsLocal(): Mapping[] | null {
   let local = localStorage.getItem("mappingList");
   if (local) {
-    let mappingList = JSON.parse(local) as Mapping[]
+    let mappingList = JSON.parse(local) as Mapping[];
     return mappingList;
   } else {
     return null;
@@ -69,7 +69,7 @@ export function getAllMappingsLocal(): Mapping[] | null {
 export function deleteMappingLocal(id: string) {
   let local = localStorage.getItem("mappingList");
   if (local) {
-    let mappingList = JSON.parse(local) as Mapping[]
+    let mappingList = JSON.parse(local) as Mapping[];
     let index = mappingList.findIndex((m) => m.id === id);
     if (index > -1) {
       mappingList.splice(index, 1);

@@ -196,9 +196,10 @@ body {
 
 .error {
   background-color: var(--error-bg);
-  color: var(--error-txt);
-  padding: 2px 8px;
   border-radius: 3px;
+  color: var(--error-txt);
+  display: none;
+  padding: 2px 8px;
 }
 
 .success {

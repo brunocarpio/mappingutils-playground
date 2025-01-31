@@ -7,6 +7,7 @@ import { invoiceSample, itemSample } from "./samples.mts";
 import { appendMappingLi, unshiftMappingLi } from "./modules/mappingLi.mjs";
 import {
   addPrettyButtonsListener,
+  addValidateJSONListener,
   makeEditorViews,
   setEditorContent,
   setEditorTheme,
@@ -112,6 +113,7 @@ window.onload = (_) => {
   makeEditorViews();
   setEditorTheme();
   addPrettyButtonsListener();
+  addValidateJSONListener();
   listMappings();
   let list = getAllMappingsLocal();
   if (list && list[0]) {

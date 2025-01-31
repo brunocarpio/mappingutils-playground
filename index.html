@@ -70,15 +70,38 @@
                   class="no-link"
                   href="https://jsontypedef.com/docs/jtd-in-5-minutes/"
                   target="_blank"
-                  >JSON Type Definition Schema</a
                 >
+                  JSON Type Definition Schema
+                </a>
               </span>
+              <div class="button-group">
+                <button
+                  aria-label="Validate JSON"
+                  class="outline-button format-json"
+                >
+                  Validate JSON
+                </button>
+                <button
+                  aria-label="Format JSON"
+                  class="outline-button format-json"
+                  id="pretty-print-schema"
+                >
+                  Format JSON
+                </button>
+              </div>
             </div>
           </div>
           <div id="pane-left-down">
             <div class="section-header">
               <span>Source JSON</span>
               <span class="error" id="source-error"></span>
+              <button
+                aria-label="Format JSON"
+                class="outline-button format-json"
+                id="pretty-print-source"
+              >
+                Format JSON
+              </button>
             </div>
           </div>
         </div>
@@ -122,9 +145,6 @@
       </li>
     </template>
 
-    <template id="pretty-print-button-template">
-      <button aria-label="Format JSON" class="format-json">Format JSON</button>
-    </template>
     <script type="module" src="/src/main.mts"></script>
   </body>
 </html>

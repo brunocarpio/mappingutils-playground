@@ -106,40 +106,12 @@ function listMappings() {
   }
 }
 
-function appendPrettifyButton(id: string, parent: HTMLElement) {
-  let template = document.getElementById(
-    "pretty-print-button-template",
-  ) as HTMLTemplateElement;
-  let clone = template?.content.cloneNode(true) as HTMLElement;
-  let button = clone.querySelector("button");
-  if (button) {
-    button.id = id;
-    parent.appendChild(button);
-  }
-}
-
-function addPrettyButtons() {
-  let sourceHeader = document.querySelector(
-    "#pane-left-down .section-header",
-  ) as HTMLElement;
-  if (sourceHeader) {
-    appendPrettifyButton("pretty-print-source", sourceHeader);
-  }
-  let schemaHeader = document.querySelector(
-    "#pane-left-up .section-header",
-  ) as HTMLElement;
-  if (schemaHeader) {
-    appendPrettifyButton("pretty-print-schema", schemaHeader);
-  }
-  addPrettyButtonsListener();
-}
-
 window.onload = (_) => {
   initializeLocal();
   switchDarkMode();
   makeEditorViews();
   setEditorTheme();
-  addPrettyButtons();
+  addPrettyButtonsListener();
   listMappings();
   let list = getAllMappingsLocal();
   if (list && list[0]) {

@@ -62,3 +62,12 @@
   border-bottom: 1px solid;
   background: var(--border);
 }
+
+#pane-left-up .section-header {
+  justify-content: space-between;
+}
+
+#pane-left-up .section-header .button-group {
+  display: flex;
+  gap: 10px;
+}

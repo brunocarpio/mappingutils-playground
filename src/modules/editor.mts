@@ -44,7 +44,8 @@ let currentMapping: Mapping;
 let inOverwrite = false;
 let leftDownChanged = false;
 let centerChanged = false;
-let syntaxError = false;
+let syntaxErrorSource = false;
+let syntaxErrorMapping = false;
 let sourceErrorSpan = document.getElementById("source-error")!;
 let mappingErrorSpan = document.getElementById("mapping-error")!;
 
@@ -108,10 +109,10 @@ function updateListenerExtension() {
     if (
       update.view === leftDownEditorView &&
       diagnosticCount(update.state) > 0 &&
-      !syntaxError
+      !syntaxErrorSource
     ) {
       console.log("SYNTAX ERROR");
-      syntaxError = true;
+      syntaxErrorSource = true;
       sourceErrorSpan.textContent = "Syntax Error";
       sourceErrorSpan.classList.replace("success", "error");
       sourceErrorSpan.style.display = "inline";
@@ -120,29 +121,32 @@ function updateListenerExtension() {
     if (
       update.view === leftDownEditorView &&
       diagnosticCount(update.state) === 0 &&
-      syntaxError
+      syntaxErrorSource
     ) {
       console.log("NO SYNTAX ERROR");
-      syntaxError = false;
+      syntaxErrorSource = false;
       sourceErrorSpan.style.display = "none";
     }
-    if (update.view === centerEditorView) {
-      if (
-        diagnosticCount(update.state) > 0 &&
-        mappingErrorSpan.style.display === "none"
-      ) {
-        mappingErrorSpan.textContent = "Syntax Error";
-        overwriteEditorContent(rightEditorView, "[]");
-      } else if (diagnosticCount(update.state) === 0 && centerChanged) {
-        centerChanged = false;
-        if (currentMapping) {
-          let computed = await computeMapping(
-            currentMapping.source,
-            currentMapping.mapping,
-          );
-          overwriteEditorContent(rightEditorView, computed);
-        }
-      }
+    if (
+      update.view === centerEditorView &&
+      diagnosticCount(update.state) > 0 &&
+      !syntaxErrorMapping
+    ) {
+      console.log("SYNTAX ERROR MAPPING");
+      syntaxErrorMapping = true;
+      mappingErrorSpan.textContent = "Syntax Error";
+      mappingErrorSpan.classList.replace("success", "error");
+      mappingErrorSpan.style.display = "inline";
+      overwriteEditorContent(rightEditorView, "[]");
+    }
+    if (
+      update.view === centerEditorView &&
+      diagnosticCount(update.state) === 0 &&
+      syntaxErrorMapping
+    ) {
+      console.log("NO SYNTAX ERROR");
+      syntaxErrorMapping = false;
+      mappingErrorSpan.style.display = "none";
     }
     if (update.docChanged && !inOverwrite) {
       if (update.view === leftDownEditorView) {
@@ -172,6 +176,14 @@ function updateListenerExtension() {
             .replace(/("[^"]*")|(\s+)/g, replacer);
         currentMapping.mapping = update.view.state.doc.toString();
         upsertMappingLocal(currentMapping);
+        if (centerChanged) {
+          console.log("IN CENTER CHANGED");
+          let computed = await computeMapping(
+            currentMapping.source,
+            currentMapping.mapping,
+          );
+          overwriteEditorContent(rightEditorView, computed);
+        }
       }
     }
   });

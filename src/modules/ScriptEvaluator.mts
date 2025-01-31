@@ -16,7 +16,10 @@ export default class ScriptEvaluator {
     this.worker = null;
   }
 
-  public async evalAsync(message: object, timeout = 1000): Promise<string> {
+  public async evalAsync(
+    message: { source: string; mapping: string },
+    timeout = 1000,
+  ): Promise<string> {
     let worker = await this.getWorker();
     if (worker) {
       return new Promise((resolve, reject) => {
@@ -41,9 +44,7 @@ export default class ScriptEvaluator {
         };
       });
     } else {
-      return new Promise((resolve, _) => {
-        resolve("");
-      });
+      return Promise.resolve("");
     }
   }
 }

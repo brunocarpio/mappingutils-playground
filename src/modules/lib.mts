@@ -12,10 +12,21 @@ export function replacer(match: string, p1: string, p2: string) {
 }
 
 export function isValidFromJTD(schema: string, data: string): boolean {
-  let validate = ajv.compile(JSON.parse(schema));
   try {
+    let validate = ajv.compile(JSON.parse(schema));
     return validate(JSON.parse(data));
   } catch (error) {
     return false;
   }
+}
+
+export default function evaluateMapping(mapping: string): object {
+  let hidden = mapping.substring(8);
+  let m = {};
+  try {
+    eval(`m = ${hidden}`);
+  } catch (error) {
+    console.log(error);
+  }
+  return m;
 }

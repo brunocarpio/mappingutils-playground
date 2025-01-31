@@ -1,7 +1,7 @@
 // adapted from https://stackoverflow.com/questions/10653809/making-webworkers-a-safe-environment/
 
 import { mapObj } from "mappingutils";
-import assignMaping from "./converter.mts";
+import evaluateMapping from "./lib.mts";
 
 const allowedGlobals = new Set([
   "Array",
@@ -46,16 +46,11 @@ const allowedGlobals = new Set([
     for (let prop of Object.getOwnPropertyNames(obj)) {
       if (!allowedGlobals.has(prop)) {
         try {
-          const descriptor = Object.getOwnPropertyDescriptor(
-            obj,
-            prop
-          );
+          const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
           if (!descriptor || descriptor.configurable) {
             Object.defineProperty(obj, prop, {
               get: () => {
-                throw new ReferenceError(
-                  prop + " is not defined"
-                );
+                throw new ReferenceError(prop + " is not defined");
               },
               configurable: false,
             });
@@ -72,24 +67,23 @@ const allowedGlobals = new Set([
   }
 })();
 
-// Message handler
 self.onmessage = (event) => {
-  const { source, mapping } = event.data;
-  let result;
-
-  // Wrap the dynamic code execution
-  const userFunction = new Function(
-    "mapObj",
-    "assignMaping",
-    "source",
-    "mapping",
-    `
+  let { source, mapping } = event.data;
+  try {
+    let userFunction = new Function(
+      "mapObj",
+      "evaluateMapping",
+      "source",
+      "mapping",
+      `
       "use strict";
-      return mapObj(JSON.parse(source), assignMaping(mapping));
-    `
-  );
-
-  // Execute the user function with the required dependencies
-  result = userFunction(mapObj, assignMaping, source, mapping);
-  postMessage(result);
+      return mapObj(JSON.parse(source), evaluateMapping(mapping));
+    `,
+    );
+    let result = userFunction(mapObj, evaluateMapping, source, mapping);
+    postMessage(result);
+  } catch (error) {
+    console.log(error);
+    postMessage([]);
+  }
 };

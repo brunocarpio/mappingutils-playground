@@ -16,7 +16,6 @@ import {
   customScrollbar,
   fixedHeightEditorExtension,
   hiddenRangesField,
-  hideTextEffect,
 } from "./customExtensions.mts";
 import { replacer, isValidFromJTD } from "./lib.mts";
 
@@ -227,9 +226,6 @@ export async function setEditorContent(mapping: Mapping) {
   overwriteEditorContent(leftDownEditorView, mapping.source);
   overwriteEditorContent(leftUpEditorView, mapping.schema);
   overwriteEditorContent(centerEditorView, mapping.mapping);
-  centerEditorView.dispatch({
-    effects: hideTextEffect.of({ from: 0, to: 8 }),
-  });
   let computed = await computeMapping(mapping.source, mapping.mapping);
   overwriteEditorContent(rightEditorView, computed);
 }

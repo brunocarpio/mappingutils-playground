@@ -53,6 +53,7 @@ function startLeftUpEv() {
       json(),
       lintGutter(),
       linter(jsonParseLinter(), { delay: 250 }),
+      saveSchemaListener(),
       scrollBar.of(darkMode ? darkScrollBar : lightScrollBar),
       scrollPastEnd(),
       theme.of(darkMode ? darkTheme : lightTheme),
@@ -128,6 +129,15 @@ export function updateThemeTransaction() {
       scrollBar.reconfigure(darkMode ? darkScrollBar : lightScrollBar),
     ],
   };
+}
+
+function saveSchemaListener() {
+  return EditorView.updateListener.of(async (update: ViewUpdate) => {
+    if (update.docChanged && !inOverwrite) {
+      currentMapping.schema = update.view.state.doc.toString();
+      upsertMappingLocal(currentMapping);
+    }
+  });
 }
 
 function syntaxErrorListener(id: string) {

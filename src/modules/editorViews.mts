@@ -144,6 +144,9 @@ function syntaxErrorListener(id: string) {
       syntaxError = false;
       span.style.display = "none";
     }
+    if (inOverwrite) {
+      span.style.display = "none";
+    }
   });
 }
 

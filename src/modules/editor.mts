@@ -1,7 +1,7 @@
 import { EditorView, basicSetup } from "codemirror";
 import { Compartment, EditorState, Extension } from "@codemirror/state";
 import { json, jsonParseLinter } from "@codemirror/lang-json";
-import { esLint, javascript } from "@codemirror/lang-javascript";
+import { javascript } from "@codemirror/lang-javascript";
 import { scrollPastEnd, ViewUpdate } from "@codemirror/view";
 import { githubLight } from "@ddietr/codemirror-themes/theme/github-light";
 import { githubDark } from "@ddietr/codemirror-themes/theme/github-dark";
@@ -10,8 +10,6 @@ import { type Mapping } from "../main.mts";
 import { getDarkModeLocal, upsertMappingLocal } from "./localStorage.mts";
 import { diagnosticCount, linter, lintGutter } from "@codemirror/lint";
 
-import globals from "globals";
-import * as eslint from "eslint-linter-browserify";
 import {
   customScrollbar,
   fixedHeightEditorExtension,
@@ -56,23 +54,7 @@ function createEditorState(readOnly: boolean, lang: string) {
     linterExtension = linter(jsonParseLinter(), { delay: 250 });
   } else {
     langExtension = javascript();
-    let lintConfig = {
-      languageOptions: {
-        globals: {
-          ...globals.node,
-        },
-        parserOptions: {
-          ecmaVersion: 2023,
-          sourceType: "module",
-        },
-      },
-      rules: {
-        semi: ["error", "never"],
-      },
-    };
-    linterExtension = linter(esLint(new eslint.Linter(), lintConfig), {
-      delay: 250,
-    });
+    linterExtension = null;
   }
   let extensions: Extension[] = [
     basicSetup,
@@ -90,7 +72,7 @@ function createEditorState(readOnly: boolean, lang: string) {
     if (lang === "javascript") {
       extensions.push(hiddenRangesField);
     }
-    extensions.push(linterExtension, lintGutter());
+    extensions.push(lintGutter());
   }
   return EditorState.create({ extensions });
 }

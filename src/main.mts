@@ -10,7 +10,7 @@ import {
   addValidateJSONListener,
   makeEditorViews,
   setEditorContent,
-  setEditorTheme,
+  setEditorsTheme,
 } from "./modules/editor.mts";
 import {
   getAllMappingsLocal,
@@ -56,7 +56,7 @@ export let initialMappingList: Mapping[] = [
 buttonDarkMode?.addEventListener("click", () => {
   toggleDarkModeLocal();
   switchDarkMode();
-  setEditorTheme();
+  setEditorsTheme();
 });
 
 addMapping?.addEventListener("click", (e: MouseEvent) => {
@@ -111,7 +111,7 @@ window.onload = (_) => {
   initializeLocal();
   switchDarkMode();
   makeEditorViews();
-  setEditorTheme();
+  setEditorsTheme();
   addPrettyButtonsListener();
   addValidateJSONListener();
   listMappings();

@@ -22,10 +22,6 @@ export function isValidFromJTD(schema: string, data: string): boolean {
 
 export default function evaluateMapping(mapping: string): object {
   let m = {};
-  try {
-    eval(`m = ${mapping}`);
-  } catch (error) {
-    console.log(error);
-  }
+  eval(`m = ${mapping}`);
   return m;
 }

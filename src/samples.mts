@@ -181,7 +181,7 @@ export let invoiceSample = {
   "payment_methods": ["Credit Card", "Bank Transfer"],
   "terms": "Payment due within 14 days from the invoice date."
 }`,
-  mapping: `let m = {
+  mapping: `{
   "$.line_items[]": ["$.items[*]", (item) => {
     return {
       item_sku: item.item_id,
@@ -235,7 +235,7 @@ export let itemSample = {
     "price": "USD 500"
   }
 }`,
-  mapping: `let m = {
+  mapping: `{
   "$.product_number": "$.product.id",
   "$.price.currency": ["$.product.price",
     (price) => price.split(" ")[0]],

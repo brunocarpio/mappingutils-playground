@@ -1,206 +1,38 @@
-import { EditorView, basicSetup } from "codemirror";
-import { Compartment, EditorState, Extension } from "@codemirror/state";
-import { json, jsonParseLinter } from "@codemirror/lang-json";
-import { javascript } from "@codemirror/lang-javascript";
-import { scrollPastEnd, ViewUpdate } from "@codemirror/view";
-import { githubLight } from "@ddietr/codemirror-themes/theme/github-light";
-import { githubDark } from "@ddietr/codemirror-themes/theme/github-dark";
+import { EditorView } from "codemirror";
 import ScriptEvaluator from "./ScriptEvaluator.mts";
 import { type Mapping } from "../main.mts";
-import { getDarkModeLocal, upsertMappingLocal } from "./localStorage.mts";
-import { diagnosticCount, linter, lintGutter } from "@codemirror/lint";
 
+import { isValidFromJTD } from "./lib.mts";
 import {
-  customScrollbar,
-  fixedHeightEditorExtension,
-  hiddenRangesField,
-} from "./customExtensions.mts";
-import { replacer, isValidFromJTD } from "./lib.mts";
-
-let leftPaneUp = document.getElementById("pane-left-up")!;
-let leftPaneDown = document.getElementById("pane-left-down")!;
-let centerPane = document.getElementById("pane-center")!;
-let rightPane = document.getElementById("pane-right")!;
+  makeCenterEV,
+  makeLeftDownEV,
+  makeLeftUpEV,
+  makeRightEV,
+  overwriteEditorContent,
+  updateThemeTransaction,
+} from "./editorViews.mts";
 
 let leftUpEditorView: EditorView;
 let leftDownEditorView: EditorView;
 let centerEditorView: EditorView;
-let rightEditorView: EditorView;
-
-let lightTheme: Extension = githubLight;
-let darkTheme: Extension = githubDark;
-let theme: Compartment = new Compartment();
-
-let scrollBar: Compartment = new Compartment();
-let lightScrollBar = customScrollbar(false);
-let darkScrollBar = customScrollbar(true);
+export let rightEditorView: EditorView;
 
 let evaluator = new ScriptEvaluator();
-let currentMapping: Mapping;
-
-let inOverwrite = false;
-let leftDownChanged = false;
-let centerChanged = false;
-let syntaxErrorSource = false;
-let syntaxErrorMapping = false;
-let sourceErrorSpan = document.getElementById("source-error")!;
-let mappingErrorSpan = document.getElementById("mapping-error")!;
-
-function createEditorState(readOnly: boolean, lang: string) {
-  let langExtension;
-  let linterExtension;
-  if (lang === "json") {
-    langExtension = json();
-    linterExtension = linter(jsonParseLinter(), { delay: 250 });
-  } else {
-    langExtension = javascript();
-    linterExtension = null;
-  }
-  let extensions: Extension[] = [
-    basicSetup,
-    langExtension,
-    scrollPastEnd(),
-    fixedHeightEditorExtension(),
-    updateListenerExtension(),
-    EditorView.lineWrapping,
-    theme.of(darkTheme),
-    scrollBar.of(darkScrollBar),
-  ];
-  if (readOnly) {
-    extensions.push(EditorState.readOnly.of(true));
-  } else {
-    if (lang === "javascript") {
-      extensions.push(hiddenRangesField);
-    }
-    extensions.push(lintGutter());
-  }
-  return EditorState.create({ extensions });
-}
-
-function makeEditorView(parent: Element, readOnly: boolean, lang: string) {
-  let state = createEditorState(readOnly, lang);
-  return new EditorView({
-    state,
-    parent,
-  });
-}
-
-function updateListenerExtension() {
-  return EditorView.updateListener.of(async (update: ViewUpdate) => {
-    if (
-      update.view === leftDownEditorView &&
-      diagnosticCount(update.state) > 0 &&
-      !syntaxErrorSource
-    ) {
-      console.log("SYNTAX ERROR");
-      syntaxErrorSource = true;
-      sourceErrorSpan.textContent = "Syntax Error";
-      sourceErrorSpan.classList.replace("success", "error");
-      sourceErrorSpan.style.display = "inline";
-      overwriteEditorContent(rightEditorView, "[]");
-    }
-    if (
-      update.view === leftDownEditorView &&
-      diagnosticCount(update.state) === 0 &&
-      syntaxErrorSource
-    ) {
-      console.log("NO SYNTAX ERROR");
-      syntaxErrorSource = false;
-      sourceErrorSpan.style.display = "none";
-    }
-    if (
-      update.view === centerEditorView &&
-      diagnosticCount(update.state) > 0 &&
-      !syntaxErrorMapping
-    ) {
-      console.log("SYNTAX ERROR MAPPING");
-      syntaxErrorMapping = true;
-      mappingErrorSpan.textContent = "Syntax Error";
-      mappingErrorSpan.classList.replace("success", "error");
-      mappingErrorSpan.style.display = "inline";
-      overwriteEditorContent(rightEditorView, "[]");
-    }
-    if (
-      update.view === centerEditorView &&
-      diagnosticCount(update.state) === 0 &&
-      syntaxErrorMapping
-    ) {
-      console.log("NO SYNTAX ERROR");
-      syntaxErrorMapping = false;
-      mappingErrorSpan.style.display = "none";
-    }
-    if (update.docChanged && !inOverwrite) {
-      if (update.view === leftDownEditorView) {
-        leftDownChanged =
-          currentMapping.source.replace(/("[^"]*")|(\s+)/g, replacer) !==
-          update.view.state.doc
-            .toString()
-            .replace(/("[^"]*")|(\s+)/g, replacer);
-        currentMapping.source = update.view.state.doc.toString();
-        upsertMappingLocal(currentMapping);
-        if (leftDownChanged) {
-          console.log("IN LEFTDOWN CHANGED");
-          let computed = await computeMapping(
-            currentMapping.source,
-            currentMapping.mapping,
-          );
-          overwriteEditorContent(rightEditorView, computed);
-        }
-      } else if (update.view === leftUpEditorView) {
-        currentMapping.schema = update.view.state.doc.toString();
-        upsertMappingLocal(currentMapping);
-      } else if (update.view === centerEditorView) {
-        centerChanged =
-          currentMapping.mapping.replace(/("[^"]*")|(\s+)/g, replacer) !==
-          update.view.state.doc
-            .toString()
-            .replace(/("[^"]*")|(\s+)/g, replacer);
-        currentMapping.mapping = update.view.state.doc.toString();
-        upsertMappingLocal(currentMapping);
-        if (centerChanged) {
-          console.log("IN CENTER CHANGED");
-          let computed = await computeMapping(
-            currentMapping.source,
-            currentMapping.mapping,
-          );
-          overwriteEditorContent(rightEditorView, computed);
-        }
-      }
-    }
-  });
-}
+export let currentMapping: Mapping;
 
 export function makeEditorViews() {
-  leftUpEditorView = makeEditorView(leftPaneUp, false, "json");
-  leftDownEditorView = makeEditorView(leftPaneDown, false, "json");
-  centerEditorView = makeEditorView(centerPane, false, "javascript");
-  rightEditorView = makeEditorView(rightPane, true, "json");
+  leftUpEditorView = makeLeftUpEV();
+  leftDownEditorView = makeLeftDownEV();
+  centerEditorView = makeCenterEV();
+  rightEditorView = makeRightEV();
 }
 
-export function setEditorTheme() {
-  let darkMode = getDarkModeLocal();
-  let transaction = {
-    effects: [
-      theme.reconfigure(darkMode ? darkTheme : lightTheme),
-      scrollBar.reconfigure(darkMode ? darkScrollBar : lightScrollBar),
-    ],
-  };
+export function setEditorsTheme() {
+  let transaction = updateThemeTransaction();
   leftUpEditorView.dispatch(transaction);
   leftDownEditorView.dispatch(transaction);
   centerEditorView.dispatch(transaction);
   rightEditorView.dispatch(transaction);
-}
-
-function overwriteEditorContent(editorView: EditorView, content: string) {
-  inOverwrite = true;
-  editorView?.dispatch({
-    changes: {
-      from: 0,
-      to: editorView.state.doc.length,
-      insert: content,
-    },
-  });
-  inOverwrite = false;
 }
 
 export async function setEditorContent(mapping: Mapping) {
@@ -212,7 +44,7 @@ export async function setEditorContent(mapping: Mapping) {
   overwriteEditorContent(rightEditorView, computed);
 }
 
-async function computeMapping(
+export async function computeMapping(
   source: string,
   mapping: string,
 ): Promise<string> {
@@ -256,18 +88,19 @@ export function addPrettyButtonsListener() {
 }
 
 export function addValidateJSONListener() {
+  let span = document.getElementById("source-error")!;
   document
     .getElementById("json-schema-validator")
     ?.addEventListener("click", () => {
-      sourceErrorSpan.style.display = "inline";
+      span.style.display = "inline";
       if (!isValidFromJTD(currentMapping.schema, currentMapping.source)) {
         console.log("INVALID SCHEMA");
-        sourceErrorSpan.textContent = "Invalid JSON";
-        sourceErrorSpan.classList.replace("success", "error");
+        span.textContent = "Invalid JSON";
+        span.classList.replace("success", "error");
       } else {
         console.log("VALID SCHEMA");
-        sourceErrorSpan.textContent = "Valid JSON";
-        sourceErrorSpan.classList.replace("error", "success");
+        span.textContent = "Valid JSON";
+        span.classList.replace("error", "success");
       }
     });
 }

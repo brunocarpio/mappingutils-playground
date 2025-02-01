@@ -18,7 +18,14 @@
   color: var(--gray2);
   font-family: var(--font-title);
   font-size: 18px;
+  font-weight: 700;
+  margin-right: 15px;
+}
+
+#navbar .nav-extra {
+  font-style: italic;
   font-weight: 600;
+  color: var(--menu-border);
 }
 
 #navbar .nav-links {

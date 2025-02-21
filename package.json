@@ -22,6 +22,6 @@
     "@ddietr/codemirror-themes": "^1.5.1",
     "ajv": "^8.17.1",
     "codemirror": "^6.0.1",
-    "mappingutils": "^2.2.1"
+    "mappingutils": "^2.2.2"
   }
 }

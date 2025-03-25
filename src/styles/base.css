@@ -59,7 +59,7 @@ body {
     "Open Sans",
     "Helvetica Neue",
     sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   height: 100dvh;
   margin: 0;
   padding: 0;
@@ -225,7 +225,6 @@ body {
 
 .format-json {
   border-radius: 15px;
-  font-size: 14px;
   padding: 6px 17px;
 }
 

@@ -70,7 +70,10 @@ body {
   --border: var(--gray1);
   --btn-hover: var(--gray1);
   --menu-border: var(--gray2);
-  --nav-bg: var(--blue);
+  --nav-bg: var(--gray1);
+  --nav-extra: var(--gray5);
+  --nav-dark-mode-bttn: var(--gray7);
+  --title: var(--gray7);
   --text: var(--gray6);
   --red-delete: var(--red2);
   --error-bg: var(--red5);
@@ -87,7 +90,10 @@ body {
   --border: var(--gray7);
   --btn-hover: var(--gray7);
   --menu-border: var(--gray6);
+  --title: var(--gray2);
   --nav-bg: var(--gray9);
+  --nav-extra: var(--gray6);
+  --nav-dark-mode-bttn: var(--gray1);
   --text: var(--gray1);
   --red-delete: var(--red4);
   --error-bg: var(--red6);

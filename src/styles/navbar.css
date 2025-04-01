@@ -15,7 +15,7 @@
 }
 
 #navbar .nav-title {
-  color: var(--gray2);
+  color: var(--title);
   font-family: var(--font-title);
   font-size: 18px;
   font-weight: 700;
@@ -25,7 +25,7 @@
 #navbar .nav-extra {
   font-style: italic;
   font-weight: 600;
-  color: var(--menu-border);
+  color: var(--nav-extra);
 }
 
 #navbar .nav-links {
@@ -38,19 +38,22 @@
   display: block;
 }
 
-#navbar .nav-links button {
+#button-import {
+}
+
+#button-dark-mode {
   background: none;
   border: none;
   cursor: pointer;
   position: relative;
 }
 
-#navbar .nav-links svg {
+#button-dark-mode svg {
   display: block;
   height: 16px;
   width: 16px;
 }
 
-#navbar .nav-links path {
-  fill: var(--gray1);
+#button-dark-mode path {
+  fill: var(--nav-dark-mode-bttn);
 }

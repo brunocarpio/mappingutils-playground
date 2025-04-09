@@ -19,6 +19,13 @@
           <span class="nav-extra">JSON to JSON utilities</span>
         </li>
         <li class="nav-links">
+          <button
+              id="import-export-button"
+              class="outline-button format-json"
+              popovertarget="import-menu"
+              >
+              Import/Export
+          </button>
           <button id="button-dark-mode">
             <svg xmlns="http://www.w3.org/2000/svg">
               <path
@@ -38,6 +45,13 @@
         </li>
       </ul>
     </nav>
+    <ul id="import-menu" class="menu" popover="auto">
+        <li>
+            <label for="import-button" style="display: block; border-radius: 4px">Import</label>
+            <input type="file" id="import-button" accept="application/json" style="display: none;">
+        </li>
+        <li><button id="export-button">Export</button></li>
+    </ul>
     <div id="main-container">
       <aside id="aside">
         <div class="edit-container">
@@ -126,7 +140,7 @@
       <li class="mapping-li">
         <input type="button" class="button-text" placeholder="New Mapping" />
         <button
-          class="tooltip ttop"
+          class="tooltip ttop dots-button"
           aria-label="options-button"
           data-text="Options"
         >

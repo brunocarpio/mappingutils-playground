@@ -38,7 +38,14 @@
   display: block;
 }
 
-#button-import {
+#import-export-button {
+  anchor-name: --import-menu;
+}
+
+#import-menu {
+  position-anchor: --import-menu;
+  top: calc(anchor(bottom) + 6px);
+  right: anchor(right);
 }
 
 #button-dark-mode {

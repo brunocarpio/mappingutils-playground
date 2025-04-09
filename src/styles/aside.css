@@ -19,8 +19,8 @@
   position: relative;
 }
 
-#mappings button,
-#mappings input.button-text {
+#mappings .dots-button,
+#mappings .button-text {
   background: none;
   border: none;
   color: var(--text);
@@ -30,7 +30,7 @@
   transition: background-color 0.3s;
 }
 
-#mappings input.button-text {
+#mappings .button-text {
   width: 70%;
 }
 
@@ -50,29 +50,6 @@
 
 #mappings li.mapping-li.active {
   background-color: var(--btn-hover);
-}
-
-#mappings ul.menu {
-  background-color: var(--border);
-  border-radius: 16px;
-  border: 1px solid var(--menu-border);
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  color: var(--text);
-  inset: auto;
-  list-style: none;
-  padding: 10px;
-  position: absolute;
-  transition: opacity 0.3s;
-  width: 100px;
-}
-
-#mappings ul.menu li button {
-  border-radius: 4px;
-  width: 100%;
-}
-
-#mappings ul.menu li button:hover {
-  background-color: var(--menu-border);
 }
 
 #mappings button.button-delete {

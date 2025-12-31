@@ -65,7 +65,7 @@ function startCenterEV() {
   let darkMode = getDarkModeLocal();
   return EditorState.create({
     extensions: [
-      // EditorView.lineWrapping,
+      EditorView.lineWrapping,
       basicSetup,
       computeListener("schema"),
       fixedHeightEditorExtension(),

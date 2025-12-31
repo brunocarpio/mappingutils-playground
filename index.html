@@ -20,11 +20,11 @@
         </li>
         <li class="nav-links">
           <button
-              id="import-export-button"
-              class="outline-button format-json"
-              popovertarget="import-menu"
-              >
-              Import/Export
+            id="import-export-button"
+            class="outline-button format-json"
+            popovertarget="import-menu"
+          >
+            Import/Export
           </button>
           <button id="button-dark-mode">
             <svg xmlns="http://www.w3.org/2000/svg">
@@ -46,11 +46,18 @@
       </ul>
     </nav>
     <ul id="import-menu" class="menu" popover="auto">
-        <li>
-            <label for="import-button" style="display: block; border-radius: 4px">Import</label>
-            <input type="file" id="import-button" accept="application/json" style="display: none;">
-        </li>
-        <li><button id="export-button">Export</button></li>
+      <li>
+        <label for="import-button" style="display: block; border-radius: 4px"
+          >Import</label
+        >
+        <input
+          type="file"
+          id="import-button"
+          accept="application/json"
+          style="display: none"
+        />
+      </li>
+      <li><button id="export-button">Export</button></li>
     </ul>
     <div id="main-container">
       <aside id="aside">
@@ -81,35 +88,35 @@
       </aside>
       <main id="main">
         <div>
-          <div id="pane-left-up">
-            <div class="section-header">
-              <span>
-                <a
-                  class="no-link"
-                  href="https://jsontypedef.com/docs/jtd-in-5-minutes/"
-                  target="_blank"
-                >
-                  JSON Type Definition Schema
-                </a>
-              </span>
-              <div class="button-group">
-                <button
-                  aria-label="Validate JSON"
-                  class="outline-button format-json"
-                  id="json-schema-validator"
-                >
-                  Validate JSON
-                </button>
-                <button
-                  aria-label="Format JSON"
-                  class="outline-button format-json"
-                  id="pretty-print-schema"
-                >
-                  Format JSON
-                </button>
-              </div>
-            </div>
-          </div>
+          <!-- <div id="pane-left-up"> -->
+          <!--   <div class="section-header"> -->
+          <!--     <span> -->
+          <!--       <a -->
+          <!--         class="no-link" -->
+          <!--         href="https://jsontypedef.com/docs/jtd-in-5-minutes/" -->
+          <!--         target="_blank" -->
+          <!--       > -->
+          <!--         JSON Type Definition Schema -->
+          <!--       </a> -->
+          <!--     </span> -->
+          <!--     <div class="button-group"> -->
+          <!--       <button -->
+          <!--         aria-label="Validate JSON" -->
+          <!--         class="outline-button format-json" -->
+          <!--         id="json-schema-validator" -->
+          <!--       > -->
+          <!--         Validate JSON -->
+          <!--       </button> -->
+          <!--       <button -->
+          <!--         aria-label="Format JSON" -->
+          <!--         class="outline-button format-json" -->
+          <!--         id="pretty-print-schema" -->
+          <!--       > -->
+          <!--         Format JSON -->
+          <!--       </button> -->
+          <!--     </div> -->
+          <!--   </div> -->
+          <!-- </div> -->
           <div id="pane-left-down">
             <div class="section-header">
               <span>Source JSON</span>

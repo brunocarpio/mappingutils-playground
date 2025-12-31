@@ -11,11 +11,12 @@
   width: 100%;
 }
 
-#pane-left-up,
-#pane-left-down {
-  height: calc(50dvh - 20px);
-}
+/* #pane-left-up, */
+/* #pane-left-down { */
+/*   height: calc(50dvh - 20px); */
+/* } */
 
+#pane-left-down,
 #pane-center,
 #pane-right {
   height: calc(100dvh - 40px);
